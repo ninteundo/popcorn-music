@@ -12,7 +12,26 @@
 </body>
 
 <template name="getName">
-  <input type="text" id="userNameInput" placeholder="Please enter your name"/>
+  <input type="text" id="userNameInput" placeholder="Please enter your name" autofocus/>
+</template>
+
+<template name="toolbar">
+  <div id="toolbar">
+  	{{> getName}}
+  	<div class="navbar">
+	  <a class="navbar-brand" href="#">Popcorn Music</a>
+	  <ul class="nav navbar-nav">
+	    <li class="active"><a href="#">Songs</a></li>
+	    <li><a href="#">Chat</a></li>
+	  </ul>
+	</div>
+  </div>
+</template>
+
+<template name="songlist">
+</template>
+
+<template name="chat">
 </template>
 
 <template name="circles">
