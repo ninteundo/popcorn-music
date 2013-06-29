@@ -1,0 +1,15 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "bootstrap-3": {}
+    },
+    "packages": {
+      "bootstrap-3": {
+        "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
+        "tag": "v0.2.5",
+        "commit": "739b15b41b6dc4bed2cdbe44f5fb2978b6f4a5d2"
+      }
+    }
+  }
+}
