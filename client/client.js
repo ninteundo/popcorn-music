@@ -43,6 +43,6 @@ Template.getName.events[ okcancel_events('#userNameInput') ] = make_okcancel_han
   }
 });
 
-Template.userList.users = function(){
-  return Users.find().fetch();
-};
+// Template.userList.users = function(){
+//   return Users.find().fetch();
+// };
