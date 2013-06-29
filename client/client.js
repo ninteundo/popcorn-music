@@ -37,7 +37,7 @@ Template.getName.events[ okcancel_events('#userNameInput') ] = make_okcancel_han
   'ok': function(text, event){
     Session.set("userName", $("#userNameInput").val());
     Session.set("userId", Meteor.uuid());
-    $("#userNameInput").val("Thanks!");
+    $("#userNameInput").remove();//.val("Thanks!");
 
     Meteor.call("addUser", Session.get("userName"), Session.get("userId")); 
   }
