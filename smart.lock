@@ -1,14 +1,24 @@
 {
-  "meteor": {},
+  "meteor": {
+    "git": "https://github.com/meteor/meteor.git",
+    "branch": "master",
+    "commit": "9bb2b5447e845c4f483df5e9b42a2c1de5ab909b"
+  },
   "dependencies": {
     "basePackages": {
-      "npm": {}
+      "npm": {},
+      "jquery-ui": {}
     },
     "packages": {
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",
         "tag": "v0.1.4",
         "commit": "68ab2b952ab21a5bbba879b37be9385ec8ff6d63"
+      },
+      "jquery-ui": {
+        "git": "https://github.com/TimHeckel/meteor-jquery-ui.git",
+        "tag": "v1.9.2",
+        "commit": "c437d45edcf1367df8d5ffa8bad2867758030bd2"
       }
     }
   }

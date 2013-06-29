@@ -1,24 +1,26 @@
+var index;
+
 Meteor.startup(function() {
   Meteor.subscribe('users');
   Meteor.subscribe('songs');
   Deps.autorun(function() {
     if (Songs.find().count() > 0) {
-      var index = lunr(function() {
+      index = lunr(function() {
         this.field('title', {boost: 10});
-        this.ref('id');
+        this.ref('_id');
       });
 
       songs = Songs.find().fetch()
       for (i in songs) {
         song = {};
-        song['id'] = i;
+        song['_id'] = songs[i]['_id'];
         song['title'] = songs[i]['title'];
         console.log(song);
         index.add(song);
       }
 
       console.log(index);
-      console.log(index.search('Run'));
+      console.log(index.search('C'));
     }
   });
 });
@@ -59,6 +61,22 @@ Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handl
     $("#userNameInput").remove();//.val("Thanks!");
 
     Meteor.call("addUser", Session.get("userName"), Session.get("userId"));
+  }
+});
+
+Template.searchBar.events({
+  'keyup': function(event) {
+    text = $('#searchBar').val();
+    results = index.search(text);
+    displays = []
+    for (i in results) {
+      id = results[i].ref
+      song = Songs.findOne({_id: id})
+      displays.push(song['title'] + ' -- ' + song['artist']);
+    }
+    $("#searchBar").autocomplete({
+      source: displays
+    });
   }
 });
 
