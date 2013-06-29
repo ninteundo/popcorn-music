@@ -6,7 +6,7 @@ Template.circles.rendered = function(){
   if (! self.handle) {
     self.handle = Deps.autorun(function () {
 
-      var width = $(document).width(),
+      var width = $(document).width() - 400,
         height = $(document).height();
 
 
@@ -23,8 +23,19 @@ Template.circles.rendered = function(){
       self.svg.attr('width', width)
         .attr('height', height);
 
-      var updateCircles = function(selection){
 
+      var createCircle = function(d, i){
+        var curr = d3.select(this);
+        curr.append('circle')
+          .attr('class', 'bkg-circle');
+
+        curr.append('text')
+          .attr('class', 'circle-label')
+          .attr('transform', 'translate(0,5)')
+          .style('font-size', fontSize + 'px');
+
+        curr.append('circle')
+          .attr('class', 'hover-circle');
       };
 
       var transitionRadius = function(selection, radius){
@@ -37,14 +48,9 @@ Template.circles.rendered = function(){
         var curr = d3.select(this);
         console.log(curr);
 
-        var circle = curr.append('circle')
-          .attr('class', 'bkg-circle');
-        var label = curr.append('text')
-          .attr('class', 'circle-label')
-          .attr('transform', 'translate(0,5)')
-          .style('font-size', fontSize + 'px');
-        var hoverCircle = curr.append('circle')
-          .attr('class', 'hover-circle');
+        var circle = curr.select('.bkg-circle');
+        var label = curr.select('.circle-label');
+        var hoverCircle = curr.select('.hover-circle');
 
         //unparametrized location
         var loc = i/users.length;
@@ -54,7 +60,7 @@ Template.circles.rendered = function(){
 
         console.log(x, y);
 
-        curr.attr('transform', 'translate(' + x + ',' + y + ')');
+        curr.transition().attr('transform', 'translate(' + x + ',' + y + ')');
 
         circle.attr('r', circleRad);
         hoverCircle.attr('r', circleRad);
@@ -78,17 +84,24 @@ Template.circles.rendered = function(){
         label.text(d.userName);
       };
 
-      var circles = self.svg.select('.circles');
+      var circleG = self.svg.select('.circles');
 
-      circles.attr('transform', 'translate(' + width/2 + ',' + height/2 + ')');
+      circleG.attr('transform', 'translate(' + width/2 + ',' + height/2 + ')');
+
+      circles = circleG.selectAll('g')
+        .data(users);
+
+      //update
+      circles.each(layout);
 
       //enter
-      circles.selectAll('g')
-        .data(users).enter()
+      circles.enter()
         .append('g')
+        .each(createCircle)
         .each(layout);
 
       //remove
+      circles.exit().remove();
 
     });
   }

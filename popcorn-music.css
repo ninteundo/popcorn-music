@@ -1,8 +1,15 @@
 
 #userNameInput{
+	font-size: 30px;
+}
+
+#toolbar{
 	position: absolute;
 	top:0;
 	left:0;
+	height: 100%;
+	width: 400px;
+	background-color: rgb(230,230,230);
 }
 
 body{
