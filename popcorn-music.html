@@ -1,0 +1,28 @@
+<head>
+  <title>Popcorn Music</title>
+</head>
+
+<body>
+  {{> getName}}
+
+  {{> userList }} 
+</body>
+
+<template name="getName">
+  <input type="text" id="userNameInput" placeholder="Please enter your name"/>
+</template>
+
+
+<template name="userList">
+<ul>
+  {{#each users}}
+  <li>
+    {{> users}}
+  </li>
+  {{/each}}
+</ul>
+</template>
+
+<template name="users">
+  {{userName}}
+</template>
