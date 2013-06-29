@@ -1,0 +1,27 @@
+
+svg{
+	position: absolute;
+	margin:0;
+	top:0;
+	left:0;
+}
+
+.circle-label{
+	text-anchor: middle;
+	font-family: Helvetica;
+	fill: rgb(100,100,100);
+}
+
+.bkg-circle{
+	fill: rgb(237,229,116);
+	stroke: rgb(255,130,58);
+	stroke-width: 5px;
+	opacity: .7;		
+}
+
+.hover-circle{
+	fill: white;
+	stroke-width: 5px;
+	opacity: 0;
+	stroke-opacity:0;	
+}

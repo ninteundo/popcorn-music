@@ -3,24 +3,21 @@
 </head>
 
 <body>
-  {{> getName}}
 
-  {{> userList }} 
+  {{> circles }} 
+
+  {{> getName}}
 </body>
 
 <template name="getName">
   <input type="text" id="userNameInput" placeholder="Please enter your name"/>
 </template>
 
-
-<template name="userList">
-<ul>
-  {{#each users}}
-  <li>
-    {{> users}}
-  </li>
-  {{/each}}
-</ul>
+<template name="circles">
+  <svg width="500" height="500">
+    <g class="connections"></g>
+        <g class="circles"></g>
+    </svg>
 </template>
 
 <template name="users">
