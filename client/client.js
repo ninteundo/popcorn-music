@@ -80,6 +80,32 @@ Meteor.startup(function() {
     });
   });
 
+  //nextSong selected
+  Deps.autorun(function(){
+    var nextSong = Session.get('nextSong');
+    var room = Rooms.findOne({name: Session.get("roomName")});
+
+    if(!room)
+      return;
+
+    if(!room.currPlayer && nextSong){
+      console.log('no currPlayer, playing new song');
+      Meteor.call('updateRoom', {name: room.name}, {currPlayer: Session.get('userId')});
+      playSong(nextSong);
+    }
+
+    Session.set('alert', '');
+
+  });
+
+  //nextPlayer selected
+  Deps.autorun(function(){
+    var nextPlayer = Session.get('nextPlayer');
+    console.log(nextPlayer);
+
+    Session.set('alert', '');
+  });
+
   //for search
   Deps.autorun(function() {
     Meteor.subscribe('users', Session.get('roomName'));
@@ -117,6 +143,8 @@ Meteor.startup(function() {
     }else{
       Session.set('alert', 'Select a song.');
     }
+
+    console.log(room);
 
   });
 
