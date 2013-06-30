@@ -113,30 +113,7 @@ Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handl
   }
 });
 
-<<<<<<< HEAD
 //Search
-Template.searchBar.events({
-  'keyup': function(event) {
-    if(event.which === 13){
-      console.log('enter inside search');
-      console.log();
-      
-    }
-    else{
-      text = $('#searchBar').val();
-      results = index.search(text);
-      displays = [];
-      for (var i in results) {
-       id = results[i].ref;
-        song = Songs.findOne({_id: id});
-        displays.push(song['title'] + ' - ' + song['artist']);
-      
-      }
-      $("#searchBar").autocomplete({
-        source: displays
-      });
-    }
-=======
 Template.searchBar.getSongs = function(){
   var text = $('#searchBar').val();
 
@@ -169,7 +146,6 @@ Template.searchBar.events({
 
   'click tr': function(event){
     //select this song
->>>>>>> 5e53673c1cfd3980708d224713e583f52ca71da0
   }
 });
 
