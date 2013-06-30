@@ -15,38 +15,18 @@ var alert = function(data){
 Meteor.setInterval(function(){
 
   var filter = {};
-
-  // ProTip: unless you need it, don't send lastSeen down as it'll make your 
-  // templates constantly re-render (and use bandwidth)
-//   var connected =  Meteor.presences.find(filter, {fields: {state: true, userId: true}}).fetch();
-//   var connected =  Meteor.presences.find(filter, {userId: 1}).fetch();
-//   var users = Users.find({}, {userId:1}).fetch();
-
-//   var d = _.difference(users, connected);
-
-//   console.log(connected.length, users.length, d.length);
- 
-//   //i know this is a slow ass search, my appologize 
-// //  for(var b=0; b<users.length; b++)
-//  //   for(var a=0; a<connected.length; a++)
-//   //     console.log(connected[a].userId);
- 
-// //  console.log("users");
-//  //   console.log("users" + users[b].userId);
-
-//   console.log("difference");
-//   for(var z=0; z<d.length; z++)
-//     Users.remove({userId: z.userId});
+  var connected =  Meteor.presences.find(filter, {userId: 1}).fetch();
+  var users = Users.find({}, {userId:1}).fetch();
+  var d = _.difference(users, connected);
 
 
-
-//  _.each(difference, function(el){
-    //Users.remove({userId: el.userId});
-//  });
+  console.log(connected.length, users.length, d.length);
+  for(var z=0; z<d.length; z++)
+    Users.remove({userId: d[z].userId});
 
   alert('hey');
 
-}, 1000);
+}, 1000*100);
 
 Meteor.publish('playlists', function(){
   return Playlists.find();
