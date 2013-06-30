@@ -137,7 +137,7 @@ Meteor.startup(function() {
     //HACK
     if(!room)
       return;
-
+      
     if(room.currSong){
       playSong(room.currSong);
     }else{
