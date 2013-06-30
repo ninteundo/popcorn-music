@@ -10,6 +10,10 @@ Meteor.publish('messages', function(){
   return Messages.find();
 });
 
+Meteor.publish('songs', function(){
+  return Songs.find();
+});
+
 Meteor.methods({
   addUser: function(userName, userId){
     console.log("adding user");
@@ -29,6 +33,4 @@ Meteor.methods({
     var text = userName + text;
     Messages.insert({userId: userId, text:text, time:Date.now()});
   }
-
-
 });
