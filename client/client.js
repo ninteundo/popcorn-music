@@ -79,7 +79,3 @@ Template.searchBar.events({
     });
   }
 });
-
-Template.userList.users = function() {
-  return Users.find().fetch();
-};

@@ -8,9 +8,10 @@ var mm = Meteor.require('musicmetadata');
 // });
 
 if (Songs.find().count() === 0) {
-  walk('./public/music', Meteor.bindEnvironment(function(path, stat) {
+  walk('./public/music/', Meteor.bindEnvironment(function(path, stat) {
     var parser = new mm(fs.createReadStream(path));
     parser.on('metadata', Meteor.bindEnvironment(function(result) {
+      console.log(path);
       var parts = path.split('/')
       result['url'] = '/' + parts[parts.length - 2] + '/' + parts[parts.length - 1]
       Songs.insert(result);

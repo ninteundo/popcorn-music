@@ -3,21 +3,24 @@
 	font-size: 30px;
 }
 
+.navbar{
+	margin-bottom: 0;
+}
+
 #toolbar{
 	position: absolute;
 	top:0;
 	left:0;
 	height: 100%;
 	width: 400px;
-	background-color: rgb(230,230,230);
+	background-color: rgb(84,121,128);
 }
 
 #searchBar{
-	position: absolute;
-	top:40px;
-	left:0;
+
 }
 
 body{
-	background-color: rgb(250,250,250);
+	background-color: rgb(89,79,79);
+	color: rgb(250,250,250);
 }
