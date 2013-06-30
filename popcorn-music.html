@@ -20,16 +20,16 @@
   	<div class="navbar">
 	  <a class="navbar-brand" href="#">Popcorn Music</a>
 	  <ul class="nav nav-tabs">
-	    <li><a href="#songs" data-toggle="tab">Songs</a></li>
+	    <li class="active"><a href="#songs" data-toggle="tab">Songs</a></li>
 	    <li><a href="#chat" data-toggle="tab">Chat</a></li>
 	  </ul>
 	</div>
 
 	<div class="tab-content">
-	  <div class="tab-pane" id="songs">
+	  <div class="tab-pane active" id="songs">
 	  	{{> searchBar}}
 	  </div>
-	  <div class="tab-pane active" id="chat">
+	  <div class="tab-pane" id="chat">
 	  	{{> chat}}
 	  </div>
 	</div>
@@ -51,14 +51,16 @@
 </template>
 
 <template name="message">
-	<td>{{userName}}</td>
+	<td style="width: 20%;">{{userName}}</td>
   	<td>{{text}}</td>
 </template>
 
 <template name="circles">
   <svg width="500" height="500">
-    <g class="connections"></g>
-        <g class="circles"></g>
+     <g class="circles"></g>
+     <g class="controls">
+     	<circle class="play"></circle>
+     </g>
     </svg>
 </template>
 

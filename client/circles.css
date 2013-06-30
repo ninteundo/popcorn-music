@@ -24,3 +24,9 @@ svg{
 	opacity: 0;
 	stroke-opacity:0;	
 }
+
+.play{
+	fill: rgb(250,208,137);
+	stroke: rgb(245,99,74);
+	stroke-width: 5px;	
+}

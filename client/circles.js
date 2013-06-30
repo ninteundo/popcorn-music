@@ -100,6 +100,17 @@ Template.circles.rendered = function(){
       //remove
       circles.exit().remove();
 
+
+      //render controls
+      var controlsG = self.svg.select('.controls');
+
+      controlsG.attr('transform', 'translate(' + width/2 + ',' + height/2 + ')');
+
+      var playCircle = controlsG.select('.play');
+
+      playCircle.attr('r', ringRad/2);
+
+
     });
   }
 };

@@ -31,3 +31,12 @@ body{
 	bottom: 0;
 	left:0;
 }
+
+table{
+	table-layout: fixed;
+	width: 400px;
+}
+
+td{
+	word-wrap: break-word;
+}
