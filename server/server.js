@@ -79,5 +79,11 @@ Meteor.methods({
   },
   setSongStartTime: function(songId){
     Songs.update({_id: songId}, {$set: {startTime:Date.now()}});
+  },
+  updateRoom: function(selector, modifier) {
+    Rooms.update(selector, modifier);
+  },
+  findOneRoomWithUrl: function(selector) {
+    return Rooms.findOne(selector);
   }
 });

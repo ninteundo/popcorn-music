@@ -14,9 +14,10 @@ svg{
 }
 
 .bkg-circle{
-	fill: rgb(250,208,137);
-	stroke: rgb(245,99,74);
+	fill: rgb(168,219,168);
+	stroke: rgb(59,134,134);
 	stroke-width: 5px;	
+	opacity: .65;
 }
 
 .hover-circle{

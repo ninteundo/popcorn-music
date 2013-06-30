@@ -197,6 +197,13 @@ Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handl
     Session.set("userId", Meteor.uuid());
     $("#userNameInput").remove(); //.val("Thanks!");
 
+    // If there is no player in the room, set this player as the
+    // current player
+    if (Users.find({roomName: Session.get('roomName')}).count() == 0) {
+      Meteor.call('updateRoom', {name: Session.get('roomName')},
+        {$set: {currentPlayerId: Session.get('userId')}});
+    }
+
     Meteor.call("addUser",
       Session.get("userName"),
       Session.get("userId"),
@@ -223,6 +230,34 @@ Template.song.isCurrentSong = function(){
   return '';
 };
 
+Template.toolbar.alertContent = function(){
+  return Session.get('alert');
+};
+
+Template.toolbar.alert = function(){
+  var message = Session.get('alert');
+  if(message && message.length > 0){
+    return true;
+  }else{
+    return false;
+  }
+};
+
+Template.toolbar.nameNotSet = function(){
+  var message = Session.get('userId');
+  if(message && message.length > 0){
+    return false;
+  }else{
+    return true;
+  }
+};
+
+Template.toolbar.events({
+  'click #removeAlert': function(event){
+    Session.set('alert', '');
+  }
+});
+
 Template.searchBar.events({
   'keyup': function(event) {
     var text = $('#searchBar').val();
@@ -247,8 +282,11 @@ Template.searchBar.events({
 
   'click tr': function(event){
     var id = this._id;
-    Meteor.call('selectSong', id, Session.get('userId'));
-    Session.set('nextSong', id);
+    room = Rooms.findOne({roomName: Session.get('roomName')});
+    if (Session.get('userId') === room.currentPlayerId) {
+      Meteor.call('selectSong', id, Session.get('userId'));
+      Session.set('nextSong', id);
+    }
   }
 });
 
