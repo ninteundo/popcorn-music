@@ -61,6 +61,10 @@ Template.circles.rendered = function(){
         circle.attr('r', circleRad);
         hoverCircle.attr('r', circleRad);
 
+        if(d.userId === Session.get('userId')){
+          circle.style('opacity', 1);
+        }
+
         hoverCircle.on('mouseover', function(){
           transitionRadius(circle, circleRad + 20);
           transitionRadius(hoverCircle, circleRad + 20);
@@ -91,7 +95,7 @@ Template.circles.rendered = function(){
             Session.set('nextPlayer', d.userId);
             circle.style('stroke-width', '10px');
           }
-           
+
         });
 
         label.text(d.userName);

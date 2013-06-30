@@ -62,7 +62,7 @@
 <template name="searchBar">
 	<input id="searchBar" type="text" placeholder="Find a song">
 	<div class="scroll-table">
-		<table class="table table-bordered">  
+		<table class="table table-bordered noselect">  
 		  {{#each getSongs}}
 		    {{> song}}
 		  {{/each}}
@@ -78,7 +78,7 @@
 </template>
 
 <template name="chat">
-  <table class="table table-bordered table-hover">  
+  <table class="table table-bordered table-hover noselect">  
   {{#each messages}}
   	<tr>
 		{{> message}}
@@ -94,7 +94,7 @@
 </template>
 
 <template name="circles">
-  <svg width="500" height="500">
+  <svg width="500" height="500" class="noselect">
      <g class="circles"></g>
      <g class="controls">
      	<circle class="play"></circle>
