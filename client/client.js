@@ -105,16 +105,7 @@ Meteor.startup(function() {
     }
   });
 
-  // var room = Rooms.findOne({name: Session.get("roomName")});
-
-  //   console.log(room);
-
-  //   if(room.currSong){
-  //     playSong(room.currSong());
-  //   }
-
   Deps.autorun(function(){
-
     var room = Rooms.findOne({name: Session.get("roomName")});
 
     //HACK

@@ -23,18 +23,34 @@ var alert = function(data){
 
 Meteor.setInterval(function(){
 
-  // var filter = {};
-  // var connected =  Meteor.presences.find(filter, {userId: 1}).fetch();
-  // var users = Users.find({}, {userId:1}).fetch();
-  // var d = _.difference(users, connected);
+  var filter = {};
+
+  // ProTip: unless you need it, don't send lastSeen down as it'll make your 
+  // templates constantly re-render (and use bandwidth)
+//   var connected =  Meteor.presences.find(filter, {fields: {state: true, userId: true}}).fetch();
+  var connected =  Meteor.presences.find(filter, {userId: 1}).fetch();
+  var users = Users.find({}, {userId:1}).fetch();
+
+  var c = [];
+  for(var a=0; a<connected.length; a++)
+    c[a] = connected.userId;
+
+  var u = [];
+  for(var b=0; b<users.length; b++)
+    u[b] = users.userId;
+
+  var d = _.difference(u, c);
+
+  console.log(c.length, u.length, d.length);
+ 
+  console.log("difference");
+  for(var z=0; z<d.length; z++){
+    Users.remove({userId: d[z].userId});
+  }
+
+}, 100*100);
 
 
-  // console.log(connected.length, users.length, d.length);
-  // for(var z=0; z<d.length; z++)
-  //   Users.remove({userId: d[z].userId});
-
-
-}, 1000*100);
 
 Meteor.publish('playlists', function(){
   return Playlists.find();
@@ -67,9 +83,13 @@ Meteor.methods({
   appointUser: function(userId, roomName){
     //Set all the current selector users to false
     Users.update({roomName: roomName}, {$set: {canSearch:false}});
-
     //Set the userid to be the selector
     Users.update({_id: userId, roomName: roomName}, {$set: {canSearch:true}});
+
+    //Set the next playing song to this users next playing song (if available)
+   // var songFromPlaylist = Playlists.
+    
+    //Set the next user to this users next user (if available)
   },
     
   removeUser: function(userId){
