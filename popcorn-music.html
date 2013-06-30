@@ -6,23 +6,26 @@
 </head>
 
 <body>
-	
+
   {{renderPage}}
 
 </body>
 
 <template name="index">
-<div>
-  {{#if nameExists}}
-  <p>The name already exists.</p>
-  {{/if}}
-  {{#if roomNotExists}}
-  <p>The room does not exist.</p>
-  {{/if}}
-  <input id="roomName">
-  <button id="newRoomButton">Create a new room</button>
-  <button id="joinRoomButton">Join a room</button>
-</div>
+	<div id="roomContainer">
+		<div id="index-header" href="#">Welcome to Popcorn Music!</div><br />
+		{{#if nameExists}}
+		<p>The name already exists.</p>
+		{{/if}}
+		{{#if roomNotExists}}
+		<p>The room does not exist.</p>
+		{{/if}}
+		<br />
+		<input type="text" id="roomName" placeholder="Type a room name">
+		<br />
+		<button class="btn btn-primary" id="newRoomButton">Create a new room</button>
+		<button class="btn btn-primary" id="joinRoomButton">Join a room</button>
+	</div>
 </template>
 
 <template name="room">

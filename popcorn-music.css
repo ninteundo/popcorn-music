@@ -6,6 +6,29 @@ body{
 	font-weight: lighter !important;
 }
 
+#roomContainer{
+	position:absolute;
+	top: 100px;
+	left: 50%;
+	margin-left: -250px;
+	width: 500px;
+}
+
+#index-header{
+	font-size: 60px;
+	text-align: center;
+}
+
+#newRoomButton, #joinRoomButton{
+	font-size: 20px;
+	margin: 5px;
+}
+
+#roomName{
+	font-size: 30px;
+	font-weight: lighter;
+}
+
 #userNameInput{
 	font-size: 30px;
 }
