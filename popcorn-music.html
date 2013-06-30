@@ -20,11 +20,19 @@
   	<div class="navbar">
 	  <a class="navbar-brand" href="#">Popcorn Music</a>
 	  <ul class="nav nav-tabs">
-	    <li class="active"><a href="#">Songs</a></li>
-	    <li><a href="#">Chat</a></li>
+	    <li><a href="#songs" data-toggle="tab">Songs</a></li>
+	    <li><a href="#chat" data-toggle="tab">Chat</a></li>
 	  </ul>
 	</div>
-	{{> searchBar}}
+
+	<div class="tab-content">
+	  <div class="tab-pane" id="songs">
+	  	{{> searchBar}}
+	  </div>
+	  <div class="tab-pane active" id="chat">
+	  	{{> chat}}
+	  </div>
+	</div>
   </div>
 </template>
 
@@ -32,18 +40,19 @@
 </template>
 
 <template name="chat">
-  <ul>  
+  <table class="table table-bordered table-hover">  
   {{#each messages}}
-    <li>
-    {{> messages}}
-    </li>
+    <tr>
+    {{> message}}
+    </tr>
   {{/each}}
-  </ul>
+  </table>
   <input type="text" id="chatInput"/>
 </template>
 
-<template name="messages">
-  {{text}}
+<template name="message">
+	<td>{{userName}}</td>
+  	<td>{{text}}</td>
 </template>
 
 <template name="circles">
