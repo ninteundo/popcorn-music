@@ -1,6 +1,71 @@
 var index; //should give this a better name
 audioPlayer = new Audio();
 
+var playSong = function(songId){
+
+    // if(Session.get("roomName") != null){
+    //  if(playingSong.length > 0){
+    //   var playingSong = playingSong[0];
+
+    //     console.log('valid');
+
+    //     //If the player has a source
+    //     if(audioPlayer.src === ""){
+    //       //Meteor.call("updateSongStartTime", playingSong.songId);
+
+    //       //if the song has already started but we arent listening to it
+
+    //       console.log('startTime', playingSong.startTime);
+    //       if(playingSong.startTime > 0){
+    //         audioPlayer.src = playingSong.url;
+    //         audioPlayer.load();
+
+    //         console.log(playingSong.startTime);
+
+    //         var offset = (Date.now() - playingSong.startTime)/1000;
+    //         offset = Math.round(offset*10)/10; //round to the nears 10ths place
+    //         //if the song has played past the duration and for some reason the ended event wasnt called 
+            
+    //         if(offset > audioPlayer.duration){
+    //           audioPlayer.src = playingSong.url;
+    //           audioPlayer.play();
+    //         }
+    //         $(audioPlayer).bind('canplay', function() {
+    //             audioPlayer.currentTime = offset; // jumps to 29th secs
+    //             audioPlayer.play()
+    //         });
+
+    //         audioPlayer.canplay = function(){
+    //           audioPlayer.currentTime = offset;
+    //           audioPlayer.play();
+    //         };
+    //       }
+    //       //if the song has not started and the player doesn't have a source
+    //       else{
+    //         audioPlayer.src = playingSong.url;
+    //         audioPlayer.play();
+    //       }
+    //     }
+    //     // if the player does have a source (something is loaded and playing or done playing)
+    //     else{
+    //       //if the current song has ended
+    //       if(audioPlayer.duration === audioPlayer.currentTime || audioPlayer.currentTime === 0){
+    //         console.log("current song ended");
+    //         audioPlayer.src = playingSong.url;
+    //         audioPlayer.play();
+    //       }
+    //       else{
+    //         //if the current song is playing and we are listening to it
+    //         console.log("creating event listener");
+    //         audioPlayer.addEventListener("ended",  function(){
+    //           console.log("song ended");
+    //           audioPlayer.src = playingSong.url;
+    //           audioPlayer.play();
+    //          });
+    //       }
+    //     }
+};
+
 Meteor.startup(function() {
   Meteor.subscribe('songs');
   Meteor.subscribe('rooms');
@@ -15,6 +80,7 @@ Meteor.startup(function() {
     });
   });
 
+  //for search
   Deps.autorun(function() {
     Meteor.subscribe('users', Session.get('roomName'));
     Meteor.subscribe('messages', Session.get('roomName'));
@@ -39,73 +105,28 @@ Meteor.startup(function() {
     }
   });
 
+  // var room = Rooms.findOne({name: Session.get("roomName")});
+
+  //   console.log(room);
+
+  //   if(room.currSong){
+  //     playSong(room.currSong());
+  //   }
+
   Deps.autorun(function(){
-    //Song
 
-    var playingSong = Songs.find({currentlyPlaying: true}).fetch();
-    if(Session.get("roomName") != null){
-     if(playingSong.length > 0){
-      var playingSong = playingSong[0];
+    var room = Rooms.findOne({name: Session.get("roomName")});
 
-        console.log('valid');
+    //HACK
+    if(!room)
+      return;
 
-        //If the player has a source
-        if(audioPlayer.src === ""){
-          //Meteor.call("updateSongStartTime", playingSong.songId);
-
-          //if the song has already started but we arent listening to it
-
-          console.log('startTime', playingSong.startTime);
-          if(playingSong.startTime > 0){
-            audioPlayer.src = playingSong.url;
-            audioPlayer.load();
-
-            console.log(playingSong.startTime);
-
-            var offset = (Date.now() - playingSong.startTime)/1000;
-            offset = Math.round(offset*10)/10; //round to the nears 10ths place
-            //if the song has played past the duration and for some reason the ended event wasnt called 
-            
-            if(offset > audioPlayer.duration){
-              audioPlayer.src = playingSong.url;
-              audioPlayer.play();
-            }
-            $(audioPlayer).bind('canplay', function() {
-                audioPlayer.currentTime = offset; // jumps to 29th secs
-                audioPlayer.play()
-            });
-
-            audioPlayer.canplay = function(){
-              audioPlayer.currentTime = offset;
-              audioPlayer.play();
-            };
-          }
-          //if the song has not started and the player doesn't have a source
-          else{
-            audioPlayer.src = playingSong.url;
-            audioPlayer.play();
-          }
-        }
-        // if the player does have a source (something is loaded and playing or done playing)
-        else{
-          //if the current song has ended
-          if(audioPlayer.duration === audioPlayer.currentTime || audioPlayer.currentTime === 0){
-            console.log("current song ended");
-            audioPlayer.src = playingSong.url;
-            audioPlayer.play();
-          }
-          else{
-            //if the current song is playing and we are listening to it
-            console.log("creating event listener");
-            audioPlayer.addEventListener("ended",  function(){
-              console.log("song ended");
-              audioPlayer.src = playingSong.url;
-              audioPlayer.play();
-             });
-          }
-        }
-      }
+    if(room.currSong){
+      playSong(room.currSong);
+    }else{
+      Session.set('alert', 'Select a song.');
     }
+
   });
 
 });

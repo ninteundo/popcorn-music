@@ -113,7 +113,8 @@ Meteor.methods({
       Rooms.insert({
          name: url,
          url: url,
-         currPlayer: currPlayer
+         currPlayer: currPlayer,
+         currSong: null
        });
     }
   }
