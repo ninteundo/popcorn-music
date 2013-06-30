@@ -75,10 +75,6 @@ Meteor.startup(function() {
                 audioPlayer.play();
             });
 
-            audioPlayer.canplay = function(){
-              audioPlayer.currentTime = offset;
-              audioPlayer.play();
-            };
           }
           //if the song has not started and the player doesn't have a source
           else{
@@ -102,8 +98,7 @@ Meteor.startup(function() {
             audioPlayer.addEventListener("ended",  function(){
               Meteor.call("updateSongStartTime", playingSong.songId);
               console.log("song ended");
-              audioPlayer.src = playingSong.url;
-              audioPlayer.play();
+              //notify the DB the song ended
              });
           }
         }

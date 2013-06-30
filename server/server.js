@@ -16,7 +16,6 @@ Meteor.publish("alerts", function(){
  return Alerts.find();
 });
 
-<<<<<<< HEAD
 Meteor.setInterval(function(){
 
   var filter = {};
@@ -42,26 +41,6 @@ Meteor.setInterval(function(){
   console.log("difference");
   for(var z=0; z<d.length; z++)
     Users.remove({userId: d[z].userId});
-=======
-var alert = function(data){
-  Alerts.remove({});
-  Alerts.insert(data);
-};
-
-Meteor.setInterval(function(){
-
-  // var filter = {};
-  // var connected =  Meteor.presences.find(filter, {userId: 1}).fetch();
-  // var users = Users.find({}, {userId:1}).fetch();
-  // var d = _.difference(users, connected);
->>>>>>> cdffc93b6c5a2b93fbb797e8cd148adf553e5a2e
-
-
-  // console.log(connected.length, users.length, d.length);
-  // for(var z=0; z<d.length; z++)
-  //   Users.remove({userId: d[z].userId});
-
-
 }, 1000*100);
 
 Meteor.publish('playlists', function(){
