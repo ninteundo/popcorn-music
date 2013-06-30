@@ -110,7 +110,7 @@ Meteor.startup(function() {
       playSong(room.currSong);
     
       //if were the current player then add an event listener to the end of the song
-      if(room.currPlayer == Session.get("userId"){
+      if(room.currPlayer == Session.get("userId")){
         audioPlayer.addEventListener("ended",  function(){
          console.log("song ended");
          Meteor.call("startNextSong", Session.get("roomId"));
