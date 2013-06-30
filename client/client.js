@@ -15,10 +15,6 @@ Meteor.startup(function() {
     });
   });
 
-  var playingSong = Songs.find({currentlyPlaying:true}).fetch();
-  if(playingSong.length > 0){
-  }
-
   Deps.autorun(function() {
     Meteor.subscribe('users', Session.get('roomName'));
     Meteor.subscribe('messages', Session.get('roomName'));
@@ -45,24 +41,22 @@ Meteor.startup(function() {
 
   Deps.autorun(function(){
     //Song
+
     var playingSong = Songs.find({currentlyPlaying: true}).fetch();
     if(Session.get("roomName") != null){
-    
      if(playingSong.length > 0){
-      console.log("length more then 0");
       var playingSong = playingSong[0];
+
+        console.log('valid');
 
         //If the player has a source
         if(audioPlayer.src === ""){
-
-          console.log("src empty");
-          console.log("playingSong start time" + playingSong.startTime);
-          Meteor.call("updateSongStartTime", playingSong.songId);
+          //Meteor.call("updateSongStartTime", playingSong.songId);
 
           //if the song has already started but we arent listening to it
-          if(playingSong.startTime > 0){
 
-            console.log("syncing to currently playing song");
+          console.log('startTime', playingSong.startTime);
+          if(playingSong.startTime > 0){
             audioPlayer.src = playingSong.url;
             audioPlayer.load();
 
@@ -70,31 +64,24 @@ Meteor.startup(function() {
 
             var offset = (Date.now() - playingSong.startTime)/1000;
             offset = Math.round(offset*10)/10; //round to the nears 10ths place
-            console.log("offset after round" + offset);
-            console.log("duration" + audioPlayer.duration);
-
             //if the song has played past the duration and for some reason the ended event wasnt called 
             
             if(offset > audioPlayer.duration){
-              console.log("song has played past the duration");
               audioPlayer.src = playingSong.url;
               audioPlayer.play();
             }
             $(audioPlayer).bind('canplay', function() {
-              console.log('inside bind');
                 audioPlayer.currentTime = offset; // jumps to 29th secs
                 audioPlayer.play()
             });
 
             audioPlayer.canplay = function(){
-              console.log("inside on can play through");
               audioPlayer.currentTime = offset;
               audioPlayer.play();
             };
           }
           //if the song has not started and the player doesn't have a source
           else{
-            console.log("start time undefined");
             audioPlayer.src = playingSong.url;
             audioPlayer.play();
           }

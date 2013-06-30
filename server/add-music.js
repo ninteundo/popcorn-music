@@ -1,11 +1,6 @@
 var fs = Meteor.require('fs');
 var walk = Meteor.require('walkdir');
 var mm = Meteor.require('musicmetadata');
-// var Fiber = Meteor.require('fibers');
-
-// Meteor.bindEnvironment(function() {
-
-// });
 
 if (Songs.find().count() === 0) {
   walk('./public/music', Meteor.bindEnvironment(function(path, stat) {

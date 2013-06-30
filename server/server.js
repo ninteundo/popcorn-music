@@ -1,4 +1,13 @@
 
+Meteor.startup(function(){
+  Alerts.remove({});
+  Songs.update({currentlyPlaying: true}, {$set: {currentlyPlaying: false}});
+  Users.remove({});
+  Rooms.remove({});
+  Messages.remove({});
+
+});
+
 Meteor.publish("users", function(roomName){
   return Users.find({roomName: roomName});
 });
@@ -14,17 +23,16 @@ var alert = function(data){
 
 Meteor.setInterval(function(){
 
-  var filter = {};
-  var connected =  Meteor.presences.find(filter, {userId: 1}).fetch();
-  var users = Users.find({}, {userId:1}).fetch();
-  var d = _.difference(users, connected);
+  // var filter = {};
+  // var connected =  Meteor.presences.find(filter, {userId: 1}).fetch();
+  // var users = Users.find({}, {userId:1}).fetch();
+  // var d = _.difference(users, connected);
 
 
-  console.log(connected.length, users.length, d.length);
-  for(var z=0; z<d.length; z++)
-    Users.remove({userId: d[z].userId});
+  // console.log(connected.length, users.length, d.length);
+  // for(var z=0; z<d.length; z++)
+  //   Users.remove({userId: d[z].userId});
 
-  alert('hey');
 
 }, 1000*100);
 

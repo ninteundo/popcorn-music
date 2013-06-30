@@ -4,7 +4,6 @@ Template.circles.rendered = function(){
   var self = this;
   self.svg = d3.select(self.find("svg"));
 
-  console.log("handle" + self.handle);
   if (! self.handle) {
     self.handle = Deps.autorun(function () {
 
