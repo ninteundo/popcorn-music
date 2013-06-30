@@ -1,22 +1,10 @@
 var index; //should give this a better name
-var audioPlayer;
+var audioPlayer = new Audio();
 
 Meteor.startup(function() {
   Meteor.subscribe('users');
   Meteor.subscribe('songs');
   Meteor.subscribe('messages');
-
-  //Check if theres a song playing and if there is start playing at the same position 
-  var currSong = Songs.findOne({currentlyPlaying:true}); // add room id here
-  if(currSong != null){
-    audioPlayer = new Audio(currSong.location);
-    
-    var offset = (Date.now() - currSong.startTime)/1000;
-    
-    audioPlayer.currentTime = offset;
-    audioPlayer.play();
-  }
-  
 
   
   Deps.autorun(function() {
@@ -42,18 +30,19 @@ Meteor.startup(function() {
     var playingQuery = Songs.find({currentlyPlaying: true}).fetch();
 
     if(playingQuery.length > 0){
-
       playingQuery = playingQuery[0];
 
       console.log(playingQuery);
 
       console.log("inside song changed");
 
-        Session.set("currentSong", playingQuery.id);
-        console.log("playingQuery:" +playingQuery);
-        audioPlayer = new Audio(playingQuery.url);
-        console.log(audioPlayer);
-        audioPlayer.play();
+      audioPlayer.src = playingQuery.url;
+
+      var offset = (Date.now() - currSong.startTime)/1000;
+      audioPlayer.currentTime = offset;
+
+      console.log(audioPlayer);
+      audioPlayer.play();
     }
 
   });
@@ -87,18 +76,6 @@ var make_okcancel_handler = function(options) {
     }
   };
 };
-
-//Toolbar
-Template.toolbar.events({
-  'click #song1button': function(){
-    console.log("song 1 button clicked");
-    Meteor.call("selectSong", "Y7TBikyKptS8cdMcA");
-  },
-  'click #song2button': function(){
-    console.log("song 2 button clicked");
-    Meteor.call("selectSong", "a7Afq2BTA8is4gAJg");
-  }
-});
 
 //Name
 Template.getName.events = {};
