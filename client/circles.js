@@ -31,7 +31,6 @@ Template.circles.rendered = function(){
 
         curr.append('text')
           .attr('class', 'circle-label')
-          .attr('transform', 'translate(0,5)')
           .style('font-size', fontSize + 'px');
 
         curr.append('circle')

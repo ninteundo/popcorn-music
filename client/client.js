@@ -1,10 +1,23 @@
-var index;
+var index; //should give this a better name
+var audioPlayer;
 
 Meteor.startup(function() {
   Meteor.subscribe('songs');
   Meteor.subscribe('messages');
   Meteor.subscribe('rooms');
   Meteor.subscribe('playlists');
+
+  //Check if theres a song playing and if there is start playing at the same position 
+  var currSong = Songs.findOne({currentlyPlaying:true}); // add room id here
+  if(currSong != null){
+    audioPlayer = new Audio(currSong.location);
+    
+    var offset = (Date.now() - currSong.startTime)/1000;
+    
+    audioPlayer.currentTime = offset;
+    audioPlayer.play();
+  }
+  
   Deps.autorun(function() {
     Meteor.subscribe('users', Session.get('roomName'));
     if (Songs.find().count() > 0) {
@@ -27,6 +40,30 @@ Meteor.startup(function() {
       }
     }
   });
+
+  Deps.autorun(function(){
+    //Song
+    var playingQuery = Songs.find({currentlyPlaying: true}).fetch();
+
+    if(playingQuery.length > 0){
+
+      playingQuery = playingQuery[0];
+
+      console.log(playingQuery);
+
+      console.log("inside song changed");
+
+        Session.set("currentSong", playingQuery.id);
+        console.log("playingQuery:" +playingQuery);
+        audioPlayer = new Audio(playingQuery.url);
+        console.log(audioPlayer);
+        audioPlayer.play();
+    }
+
+  });
+
+
+
 });
 
 // Define some handlers
@@ -100,7 +137,19 @@ Template.index.events({
   }
 });
 
+//Toolbar
+Template.toolbar.events({
+  'click #song1button': function(){
+    console.log("song 1 button clicked");
+    Meteor.call("selectSong", "Y7TBikyKptS8cdMcA");
+  },
+  'click #song2button': function(){
+    console.log("song 2 button clicked");
+    Meteor.call("selectSong", "a7Afq2BTA8is4gAJg");
+  }
+});
 
+//Name
 Template.getName.events = {};
 
 Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handler({
@@ -116,7 +165,9 @@ Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handl
   }
 });
 
-Template.searchBar.getSongs = function() {
+
+//Search
+Template.searchBar.getSongs = function(){
   var text = $('#searchBar').val();
 
   if (!text || text.length == 0) {
@@ -148,7 +199,9 @@ Template.searchBar.events({
     Session.set('filteredSongs', displays);
   },
 
-  'click tr': function(event) {}
+  'click tr': function(event){
+    Meteor.call('selectSong', $(this)[0]._id);
+  }
 });
 
 Template.chat.messages = function() {
@@ -165,3 +218,4 @@ Template.chat.events({
     }
   }
 });
+

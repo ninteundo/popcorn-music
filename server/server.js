@@ -30,6 +30,7 @@ Meteor.methods({
     });
   },
   removeUser: function(userId){
+    console.log('removeUser');
     console.log("removing user" + userId);
     Users.remove({userId: userId});
   },
@@ -40,5 +41,10 @@ Meteor.methods({
   },
   addToChat: function(userName, userId, text){
     Messages.insert({userId: userId, userName:userName, text:text, time:Date.now()});
+  },
+  selectSong: function(songId){
+    console.log("inside select song");
+    Songs.update({currentlyPlaying:true}, {$set: {currentlyPlaying:false, timeStarted:0}}); 
+    Songs.update({_id: songId}, {$set: {currentlyPlaying:true, timeStarted:Date.now()}});
   }
 });
