@@ -46,7 +46,6 @@ Template.circles.rendered = function(){
 
       var layout = function(d, i){
         var curr = d3.select(this);
-        console.log(curr);
 
         var circle = curr.select('.bkg-circle');
         var label = curr.select('.circle-label');
@@ -57,8 +56,6 @@ Template.circles.rendered = function(){
 
         var x = Math.cos(loc*Math.PI*2)*ringRad;
         var y = Math.sin(loc*Math.PI*2)*ringRad;
-
-        console.log(x, y);
 
         curr.transition().attr('transform', 'translate(' + x + ',' + y + ')');
 
@@ -102,6 +99,17 @@ Template.circles.rendered = function(){
 
       //remove
       circles.exit().remove();
+
+
+      //render controls
+      var controlsG = self.svg.select('.controls');
+
+      controlsG.attr('transform', 'translate(' + width/2 + ',' + height/2 + ')');
+
+      var playCircle = controlsG.select('.play');
+
+      playCircle.attr('r', ringRad/2);
+
 
     });
   }

@@ -17,10 +17,9 @@ if (Songs.find().count() === 0) {
     } else {
       var parser = new mm(fs.createReadStream(path));
       parser.on('metadata', Meteor.bindEnvironment(function(result) {
-        result['url'] = '/' + parts[parts.length - 2] + '/' + parts[parts.length - 1]
+        result['url'] = '/music/' + parts[parts.length - 2] + '/' + parts[parts.length - 1];
         Songs.insert(result);
       }, function(err) {
-
       }));
     }
   }, function(err) {

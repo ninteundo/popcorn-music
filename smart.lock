@@ -1,14 +1,11 @@
 {
-  "meteor": {
-    "git": "https://github.com/meteor/meteor.git",
-    "branch": "master",
-    "commit": "9bb2b5447e845c4f483df5e9b42a2c1de5ab909b"
-  },
+  "meteor": {},
   "dependencies": {
     "basePackages": {
       "npm": {},
       "jquery-ui": {},
-      "router": {}
+      "router": {},
+      "bootstrap-3": {}
     },
     "packages": {
       "npm": {
@@ -30,6 +27,11 @@
         "git": "https://github.com/tmeasday/meteor-page-js-ie-support.git",
         "tag": "v1.3.5",
         "commit": "b99ed8380aefd10b2afc8f18d9eed4dd0d8ea9cb"
+      },
+      "bootstrap-3": {
+        "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
+        "tag": "v0.2.5",
+        "commit": "739b15b41b6dc4bed2cdbe44f5fb2978b6f4a5d2"
       }
     }
   }

@@ -2,6 +2,7 @@
   "packages": {
     "npm": {},
     "jquery-ui": {},
-    "router": {}
+    "router": {},
+    "bootstrap-3": {}
   }
 }

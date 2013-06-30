@@ -13,10 +13,9 @@ svg{
 }
 
 .bkg-circle{
-	fill: rgb(237,229,116);
-	stroke: rgb(255,130,58);
-	stroke-width: 5px;
-	opacity: .7;		
+	fill: rgb(250,208,137);
+	stroke: rgb(245,99,74);
+	stroke-width: 5px;	
 }
 
 .hover-circle{
@@ -24,4 +23,10 @@ svg{
 	stroke-width: 5px;
 	opacity: 0;
 	stroke-opacity:0;	
+}
+
+.play{
+	fill: rgb(250,208,137);
+	stroke: rgb(245,99,74);
+	stroke-width: 5px;	
 }
