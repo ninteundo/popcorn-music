@@ -145,7 +145,7 @@ Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handl
     // If there is no player in the room, set this player as the
     // current player
     if (Users.find({roomName: Session.get('roomName')}).count() == 0) {
-      room = Rooms.update({roomName: Session.get('roomName')},
+      Rooms.update({name: Session.get('roomName')},
         {$set: {currentPlayerId: Session.get('userId')}});
     }
 
