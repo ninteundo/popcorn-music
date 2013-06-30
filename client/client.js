@@ -192,7 +192,7 @@ Template.searchBar.events({
 
   'click tr': function(event){
     var id = this._id;
-    Meteor.call('selectSong', id, Sessiong.get('userId'));
+    Meteor.call('selectSong', id, Session.get('userId'));
     Session.set('nextSong', id);
   }
 });
