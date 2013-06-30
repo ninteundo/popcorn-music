@@ -20,9 +20,10 @@ if (Songs.find().count() === 0) {
         result['url'] = '/' + parts[parts.length - 2] + '/' + parts[parts.length - 1]
         Songs.insert(result);
       }, function(err) {
+        console.log("error in add-music.js 1" + err);
       }));
     }
   }, function(err) {
-
+    console.log("err in add-music.js 2" + err);
   }));
 }

@@ -1,8 +1,22 @@
-var index;
+var index; //should give this a better name
+var audioPlayer;
+
 
 Meteor.startup(function() {
   Meteor.subscribe('users');
   Meteor.subscribe('songs');
+
+  //Check if theres a song playing and if there is start playing at the same position 
+  var currSong = Songs.findOne({playing:true}); // add room id here
+  if(currSong != null){
+    audioPlayer = new Audio(currSong.location);
+    
+    var offset = (Date.now() - currSong.startTime)/1000;
+    
+    audioPlayer.currentTime = offset;
+    audioPlayer.play();
+  }
+
   Deps.autorun(function() {
     if (Songs.find().count() > 0) {
       index = lunr(function() {
@@ -19,6 +33,7 @@ Meteor.startup(function() {
       }
     }
   });
+
 });
 
 // Define some handlers
@@ -47,7 +62,7 @@ var make_okcancel_handler = function(options) {
   };
 };
 
-
+//Name
 Template.getName.events = {};
 
 Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handler({
@@ -60,6 +75,7 @@ Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handl
   }
 });
 
+//Search
 Template.searchBar.events({
   'keyup': function(event) {
     text = $('#searchBar').val();
@@ -75,3 +91,19 @@ Template.searchBar.events({
     });
   }
 });
+
+//Song
+Template.song = function(){
+  var currSongFromDb = Songs.find({currentlyPlaying: true});
+  var currSongFromSessionId  = Session.get("currentSong");
+
+  if(currSongFromDb.songId != currSongFromSessionId){
+
+    Session.set("currentSong", currSongFromDb.songId);
+    audioPlayer = new Audio(currentSongFromDb.location);
+    audioPlayer.play();
+
+  }
+
+  return currSongFromDb;
+};
