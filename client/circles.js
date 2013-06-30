@@ -1,3 +1,9 @@
+Template.circles.nextPlayerNotSelected = function() {
+  userId = Session.get('userId');
+  room = Rooms.findOne({roomName: Session.get('roomName')})
+  return (room.currentPlayerId === userId) && (!(Session.get('nextPlayer')));
+}
+
 
 Template.circles.rendered = function(){
   var self = this;
@@ -83,6 +89,9 @@ Template.circles.rendered = function(){
           }
 
           Session.set('nextPlayer', d.userId);
+          room = Rooms.findOne({roomName: Session.get('roomName')});
+          Rooms.update({roomName: Session.get('roomName')},
+            {$set: {nextPlayerId: d.userId}});
           circleG.selectAll('g').select('circle').style('stroke-width', '5px');
           circle.style('stroke-width', '10px');
         });

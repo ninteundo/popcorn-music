@@ -142,6 +142,13 @@ Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handl
     Session.set("userId", Meteor.uuid());
     $("#userNameInput").remove(); //.val("Thanks!");
 
+    // If there is no player in the room, set this player as the
+    // current player
+    if (Users.find({roomName: Session.get('roomName')}).count() == 0) {
+      room = Rooms.update({roomName: Session.get('roomName')},
+        {$set: {currentPlayerId: Session.get('userId')}});
+    }
+
     Meteor.call("addUser",
       Session.get("userName"),
       Session.get("userId"),
@@ -192,8 +199,11 @@ Template.searchBar.events({
 
   'click tr': function(event){
     var id = this._id;
-    Meteor.call('selectSong', id, Session.get('userId'));
-    Session.set('nextSong', id);
+    room = Rooms.findOne({roomName: Session.get('roomName')});
+    if (Session.get('userId') === room.currentPlayerId) {
+      Meteor.call('selectSong', id, Session.get('userId'));
+      Session.set('nextSong', id);
+    }
   }
 });
 
