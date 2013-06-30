@@ -15,12 +15,8 @@ Meteor.startup(function() {
         song = {};
         song['_id'] = songs[i]['_id'];
         song['title'] = songs[i]['title'];
-        console.log(song);
         index.add(song);
       }
-
-      console.log(index);
-      console.log(index.search('C'));
     }
   });
 });
