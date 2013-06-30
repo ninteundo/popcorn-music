@@ -5,12 +5,20 @@ Meteor.startup(function() {
   Meteor.subscribe('songs');
   Meteor.subscribe('rooms');
   Meteor.subscribe('playlists');
+  Meteor.subscribe('alerts');
+
+  Meteor.autosubscribe(function() {
+    Alerts.find().observe({
+      added: function(item){
+        console.log(item);
+      }
+    });
+  });
 
   var playingSong = Songs.find({currentlyPlaying:true}).fetch();
   if(playingSong.length > 0){
   }
-    
-  
+
   Deps.autorun(function() {
     Meteor.subscribe('users', Session.get('roomName'));
     Meteor.subscribe('messages', Session.get('roomName'));
@@ -112,8 +120,6 @@ Meteor.startup(function() {
       }
     }
   });
-      
-
 
 });
 
@@ -157,35 +163,20 @@ Template.index.roomNotExists = function() {
 
 Template.index.events({
   'click #newRoomButton': function() {
-    Session.set('nameExists', false);
-    Session.set('roomNotExists', false);
     var name = $('#roomName').val();
-    url = nameToUrl(name);
-    if (Rooms.find({
-      url: url
-    }).count() !== 0) {
-      Session.set('nameExists', true);
-    } else {
-      Rooms.insert({
-        name: name,
-        url: url,
-        currPlayer: Session.get("userId")
-      });
+    var url = nameToUrl(name);
+    // if (Rooms.find({
+    //   url: url
+    // }).count() !== 0) {
+    //   Session.set('nameExists', true);
+    // } else {
+    //   Rooms.insert({
+    //     name: name,
+    //     url: url,
+    //     currPlayer: Session.get("userId")
+    //   });
+Session.set('roomName', url);
       Meteor.Router.to('/room/' + url);
-    }
-  },
-  'click #joinRoomButton': function() {
-    Session.set('nameExists', false);
-    Session.set('roomNotExists', false);
-    var name = $('#roomName').val();
-    url = nameToUrl(name);
-    if (Rooms.find({
-      url: url
-    }).count() !== 0) {
-      Meteor.Router.to('/room/' + url);
-    } else {
-      Session.set('roomNotExists', true);
-    }
   }
 });
 
@@ -293,11 +284,7 @@ Template.searchBar.events({
 
   'click tr': function(event){
     var id = this._id;
-    room = Rooms.findOne({roomName: Session.get('roomName')});
-    if (Session.get('userId') === room.currentPlayerId) {
-      Meteor.call('selectSong', id, Session.get('userId'));
-      Session.set('nextSong', id);
-    }
+    Session.set('nextSong', id);
   }
 });
 

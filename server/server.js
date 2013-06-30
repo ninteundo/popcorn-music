@@ -3,6 +3,14 @@ Meteor.publish("users", function(roomName){
   return Users.find({roomName: roomName});
 });
 
+Meteor.publish("alerts", function(){
+ return Alerts.find();
+});
+
+var alert = function(data){
+  Alerts.remove({});
+  Alerts.insert(data);
+};
 
 Meteor.setInterval(function(){
 
@@ -11,24 +19,24 @@ Meteor.setInterval(function(){
   // ProTip: unless you need it, don't send lastSeen down as it'll make your 
   // templates constantly re-render (and use bandwidth)
 //   var connected =  Meteor.presences.find(filter, {fields: {state: true, userId: true}}).fetch();
-  var connected =  Meteor.presences.find(filter, {userId: 1}).fetch();
-  var users = Users.find({}, {userId:1}).fetch();
+//   var connected =  Meteor.presences.find(filter, {userId: 1}).fetch();
+//   var users = Users.find({}, {userId:1}).fetch();
 
-  var d = _.difference(users, connected);
+//   var d = _.difference(users, connected);
 
-  console.log(connected.length, users.length, d.length);
+//   console.log(connected.length, users.length, d.length);
  
-  //i know this is a slow ass search, my appologize 
-//  for(var b=0; b<users.length; b++)
- //   for(var a=0; a<connected.length; a++)
-  //     console.log(connected[a].userId);
+//   //i know this is a slow ass search, my appologize 
+// //  for(var b=0; b<users.length; b++)
+//  //   for(var a=0; a<connected.length; a++)
+//   //     console.log(connected[a].userId);
  
-//  console.log("users");
- //   console.log("users" + users[b].userId);
+// //  console.log("users");
+//  //   console.log("users" + users[b].userId);
 
-  console.log("difference");
-  for(var z=0; z<d.length; z++)
-    Users.remove({userId: z.userId});
+//   console.log("difference");
+//   for(var z=0; z<d.length; z++)
+//     Users.remove({userId: z.userId});
 
 
 
@@ -36,7 +44,9 @@ Meteor.setInterval(function(){
     //Users.remove({userId: el.userId});
 //  });
 
-}, 1000*100);
+  alert('hey');
+
+}, 1000);
 
 Meteor.publish('playlists', function(){
   return Playlists.find();
@@ -101,7 +111,6 @@ Meteor.methods({
     Songs.update({currentlyPlaying:true}, {$set: {currentlyPlaying:false, startTime:0}}); 
     Songs.update({_id: songId}, {$set: {currentlyPlaying:true, startTime:Date.now()}});
   },
-  
   setSongStartTime: function(songId){
     Songs.update({_id: songId}, {$set: {startTime:Date.now()}});
   },
@@ -110,5 +119,14 @@ Meteor.methods({
   },
   findOneRoomWithUrl: function(selector) {
     return Rooms.findOne(selector);
+  },
+  createRoom: function(url, currPlayer){
+    if(!Rooms.findOne({url: url})){
+      Rooms.insert({
+         name: url,
+         url: url,
+         currPlayer: currPlayer
+       });
+    }
   }
 });
