@@ -102,6 +102,9 @@
 </template>
 
 <template name="circles">
+  {{#if nextPlayerNotSelected}}
+  <p>Please pick the next player by clicking him/her!</p>
+  {{/if}}
   <svg width="500" height="500" class="noselect">
      <g class="circles"></g>
      <g class="controls">
