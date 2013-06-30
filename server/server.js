@@ -20,6 +20,7 @@ Meteor.methods({
     Users.insert({userName: userName, userId: userId, playCount:0, timeJoined:Date.now()});
   },
   removeUser: function(userId){
+    console.log('removeUser');
     console.log("removing user" + userId);
     Users.remove({userId: userId});
   },

@@ -145,7 +145,7 @@ Template.searchBar.events({
   },
 
   'click tr': function(event){
-    //select this song
+    Meteor.call('selectSong', $(this)[0]._id);
   }
 });
 
@@ -163,4 +163,3 @@ Template.chat.events({
     }
   }
 });
-
