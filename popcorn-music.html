@@ -41,27 +41,26 @@
 <template name="searchBar">
 	<input id="searchBar" type="text" placeholder="Find a song">
 	<div class="scroll-table">
-		<table class="table table-bordered table-hover">  
+		<table class="table table-bordered">  
 		  {{#each getSongs}}
-		    <tr>
 		    {{> song}}
-		    </tr>
 		  {{/each}}
 		</table>
 	</div>
 </template>
 
 <template name="song">
-	<td>{{title}}</td>
-  	<td>{{album}}</td>
+	<tr class="{{isCurrentSong}}">
+		<td>{{title}}</td>
+  		<td>{{album}}</td>
+  	</tr>
 </template>
-
 
 <template name="chat">
   <table class="table table-bordered table-hover">  
   {{#each messages}}
-    <tr>
-    {{> message}}
+  	<tr>
+		{{> message}}
     </tr>
   {{/each}}
   </table>

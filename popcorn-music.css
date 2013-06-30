@@ -14,6 +14,10 @@ body{
 	margin-bottom: 0;
 }
 
+.highlight{
+	background-color: rgb(200,200,200);
+}
+
 .navbar-brand{
 	font-weight: lighter;
 	font-size:20px;

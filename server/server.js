@@ -1,6 +1,27 @@
+
 Meteor.publish("users", function(){
   return Users.find();
 });
+
+
+// Meteor.setInterval(function(){
+
+//   var filter = {};
+
+//   // ProTip: unless you need it, don't send lastSeen down as it'll make your 
+//   // templates constantly re-render (and use bandwidth)
+//   var connected =  Meteor.presences.find(filter, {fields: {state: true, userId: true}}).fetch();
+//   var users = Users.find().fetch();
+
+//   var difference = _.difference(users, connected);
+
+//   console.log(connected.length, users.length, difference.length);
+
+//   _.each(difference, function(el){
+//     Users.remove({_id: el._id});
+//   });
+
+// }, 1000);
 
 Meteor.publish('playlists', function(){
   return Playlists.find();
@@ -33,6 +54,13 @@ Meteor.methods({
     Messages.insert({userId: userId, userName:userName, text:text, time:Date.now()});
   },
   selectSong: function(songId){
+
+    var currSong = Songs.find({currentlyPlaying:true}).fetch();
+
+    if(currSong.length != 0){
+      return;
+    }
+
     console.log("inside select song");
     Songs.update({currentlyPlaying:true}, {$set: {currentlyPlaying:false, timeStarted:0}}); 
     Songs.update({_id: songId}, {$set: {currentlyPlaying:true, timeStarted:Date.now()}});

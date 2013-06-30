@@ -4,7 +4,8 @@
     "basePackages": {
       "npm": {},
       "jquery-ui": {},
-      "bootstrap-3": {}
+      "bootstrap-3": {},
+      "presence": {}
     },
     "packages": {
       "npm": {
@@ -21,6 +22,11 @@
         "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
         "tag": "v0.2.5",
         "commit": "739b15b41b6dc4bed2cdbe44f5fb2978b6f4a5d2"
+      },
+      "presence": {
+        "git": "https://github.com/tmeasday/meteor-presence.git",
+        "tag": "v0.2.0",
+        "commit": "cb103275ba67e524bf3a9cce4ff0b36f03959d1b"
       }
     }
   }

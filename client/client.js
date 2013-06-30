@@ -10,15 +10,11 @@ Meteor.startup(function() {
   var currSong = Songs.findOne({currentlyPlaying:true}); // add room id here
   if(currSong != null){
     audioPlayer = new Audio(currSong.location);
-    
     var offset = (Date.now() - currSong.startTime)/1000;
-    
     audioPlayer.currentTime = offset;
     audioPlayer.play();
   }
-  
 
-  
   Deps.autorun(function() {
     if (Songs.find().count() > 0) {
       index = lunr(function() {
@@ -124,6 +120,13 @@ Template.searchBar.getSongs = function(){
   return Session.get('filteredSongs');
 };
 
+Template.song.isCurrentSong = function(){
+  if(this._id === Session.get('nextSong')){
+    return 'highlight';
+  }
+  return '';
+};
+
 Template.searchBar.events({
   'keyup': function(event) {
     var text = $('#searchBar').val();
@@ -145,7 +148,9 @@ Template.searchBar.events({
   },
 
   'click tr': function(event){
-    Meteor.call('selectSong', $(this)[0]._id);
+    var id = this._id;
+    Meteor.call('selectSong', id);
+    Session.set('nextSong', id);
   }
 });
 
