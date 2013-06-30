@@ -10,16 +10,31 @@ Meteor.setInterval(function(){
 
   // ProTip: unless you need it, don't send lastSeen down as it'll make your 
   // templates constantly re-render (and use bandwidth)
-  var connected =  Meteor.presences.find(filter, {fields: {state: true, userId: true}}).fetch();
-  var users = Users.find().fetch();
+//   var connected =  Meteor.presences.find(filter, {fields: {state: true, userId: true}}).fetch();
+  var connected =  Meteor.presences.find(filter, {userId: 1}).fetch();
+  var users = Users.find({}, {userId:1}).fetch();
 
-  var difference = _.difference(connected, users);
+  var d = _.difference(users, connected);
 
-  console.log(connected.length, users.length, difference.length);
+  console.log(connected.length, users.length, d.length);
+ 
+  //i know this is a slow ass search, my appologize 
+//  for(var b=0; b<users.length; b++)
+ //   for(var a=0; a<connected.length; a++)
+  //     console.log(connected[a].userId);
+ 
+//  console.log("users");
+ //   console.log("users" + users[b].userId);
 
-  _.each(difference, function(el){
+  console.log("difference");
+  for(var z=0; z<d.length; z++)
+    Users.remove({userId: z.userId});
+
+
+
+//  _.each(difference, function(el){
     //Users.remove({userId: el.userId});
-  });
+//  });
 
 }, 1000*100);
 
@@ -50,6 +65,15 @@ Meteor.methods({
       timeJoined:Date.now()
     });
   },
+
+  appointUser: function(userId, roomName){
+    //Set all the current selector users to false
+    Users.update({roomName: roomName}, {$set: {canSearch:false}});
+
+    //Set the userid to be the selector
+    Users.update({_id: userId, roomName: roomName}, {$set: {canSearch:true}});
+  },
+    
   removeUser: function(userId){
     console.log('removeUser');
     console.log("removing user" + userId);
@@ -77,6 +101,7 @@ Meteor.methods({
     Songs.update({currentlyPlaying:true}, {$set: {currentlyPlaying:false, startTime:0}}); 
     Songs.update({_id: songId}, {$set: {currentlyPlaying:true, startTime:Date.now()}});
   },
+  
   setSongStartTime: function(songId){
     Songs.update({_id: songId}, {$set: {startTime:Date.now()}});
   },

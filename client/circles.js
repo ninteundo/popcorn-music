@@ -1,6 +1,7 @@
 Template.circles.nextPlayerNotSelected = function() {
-  userId = Session.get('userId');
-  room = Rooms.findOne({name: Session.get('roomName')});
+  var userId = Session.get('userId');
+  console.log("room name" + Session.get('roomName'));
+  var room = Rooms.findOne({name: Session.get('roomName')});
 
   console.log(room);
   console.log(Session.get('roomName'));
@@ -13,6 +14,7 @@ Template.circles.rendered = function(){
   var self = this;
   self.svg = d3.select(self.find("svg"));
 
+  console.log("handle" + self.handle);
   if (! self.handle) {
     self.handle = Deps.autorun(function () {
 

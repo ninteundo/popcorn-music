@@ -48,16 +48,21 @@
   	<div class="navbar">
 	  <a class="navbar-brand" href="#">Popcorn Music</a>
 	  <ul class="nav nav-tabs nav-tabs-custom">
-	    <li class="active"><a href="#songs" data-toggle="tab">Songs</a></li>
-	    <li><a href="#chat" data-toggle="tab">Chat</a></li>
+	    <li><a href="#songs" data-toggle="tab">Songs</a></li>
+      <li class="active"><a href="#chat" data-toggle="tab">Chat</a></li>
 	  </ul>
 	</div>
 
 	<div class="tab-content">
-	  <div class="tab-pane active" id="songs">
+	  <div class="tab-pane" id="songs">
+    {{#if allowedToPick}}
 	  	{{> searchBar}}
+    {{/if}}
+    {{#unless allowedToPick}}
+      You must be chosen to pick a song
+    {{/unless}}
 	  </div>
-	  <div class="tab-pane" id="chat">
+	  <div class="tab-pane active" id="chat">
 	  	{{> chat}}
 	  </div>
 	</div>

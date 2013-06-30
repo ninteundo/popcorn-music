@@ -10,7 +10,6 @@ Meteor.startup(function() {
   if(playingSong.length > 0){
   }
     
-
   
   Deps.autorun(function() {
     Meteor.subscribe('users', Session.get('roomName'));
@@ -39,8 +38,9 @@ Meteor.startup(function() {
   Deps.autorun(function(){
     //Song
     var playingSong = Songs.find({currentlyPlaying: true}).fetch();
-
-    if(playingSong.length > 0){
+    if(Session.get("roomName") != null){
+    
+     if(playingSong.length > 0){
       console.log("length more then 0");
       var playingSong = playingSong[0];
 
@@ -109,6 +109,7 @@ Meteor.startup(function() {
              });
           }
         }
+      }
     }
   });
       
@@ -193,9 +194,11 @@ Template.getName.events = {};
 
 Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handler({
   'ok': function(text, event) {
+    console.log("inside ok function");
+
     Session.set("userName", $("#userNameInput").val());
     Session.set("userId", Meteor.uuid());
-    $("#userNameInput").remove(); //.val("Thanks!");
+    $("#userNameInput").remove(); 
 
     // If there is no player in the room, set this player as the
     // current player
@@ -210,6 +213,7 @@ Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handl
       Session.get("roomName"));
   }
 });
+
 
 
 //Search
@@ -228,6 +232,13 @@ Template.song.isCurrentSong = function(){
     return 'highlight';
   }
   return '';
+};
+
+//Toolbar
+Template.toolbar.allowedToPick = function(){
+  var x = Users.find({userId: Session.get("userId")}, {canSearch:1});
+  
+  return (x && x.canSearch);
 };
 
 Template.toolbar.alertContent = function(){
