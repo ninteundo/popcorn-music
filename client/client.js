@@ -1,16 +1,34 @@
 var index; //should give this a better name
 audioPlayer = new Audio();
 
+var wrapUp = function(){
+  console.log('warp');
+      var room = Rooms.findOne({name: Session.get("roomName")});
+
+      var currPlayer = room.currPlayer;
+
+      console.log('curplayer', currPlayer);
+      console.log("session id", Session.get("userId"));
+      //if were the current player then add an event listener to the end of the song
+      if(room.currPlayer === Session.get("userId")){
+        audioPlayer.addEventListener("ended",  function(){
+         console.log("song ended");
+         Meteor.call("startNextSong", Session.get("roomName"));
+       });
+      }
+    };
 var playSong = function(songId){
+  console.log("songid" + songId);
 
-  var playingSong = Songs.find(songId).fetch();
+  var playingSong = Songs.find(songId).fetch()[0];
+  if(playingSong){
 
-      if(playingSong.length > 0){
 
          console.log('valid');
 
            //if the song has already started but we arent listening to it
-           if(playingSong.startTime > 0){
+/*           if(playingSong.startTime > 0){
+             console.log("start time set syncing");
              audioPlayer.src = playingSong.url;
              audioPlayer.load();
 
@@ -18,19 +36,25 @@ var playSong = function(songId){
 
              var offset = (Date.now() - playingSong.startTime)/1000;
              offset = Math.round(offset*10)/10; //round to the nears 10ths place
+
+             console.log("offset");
             
              $(audioPlayer).bind('canplay', function() {
                  audioPlayer.currentTime = offset; // jumps to 29th secs
-                 audioPlayer.play()
+                 audioPlayer.play();
              });
 
            //if the song has not started and the player doesn't have a source
            } 
-           else{
+           else{*/
+             console.log("in else");
+             console.log(playingSong);
              audioPlayer.src = playingSong.url;
              audioPlayer.play();
-           }
-        }
+          // }
+             //
+             wrapUp();
+            }
 };
 
 Meteor.startup(function() {
@@ -47,7 +71,7 @@ Meteor.startup(function() {
     });
   });
 
-  //nextSong selected
+  //Plays a song if first user and no song is playing
   Deps.autorun(function(){
     var nextSong = Session.get('nextSong');
     var room = Rooms.findOne({name: Session.get("roomName")});
@@ -57,8 +81,9 @@ Meteor.startup(function() {
 
     if(!room.currPlayer && nextSong){
       console.log('no currPlayer, playing new song');
-      Meteor.call('updateRoom', {name: room.name}, {currPlayer: Session.get('userId')});
-      playSong(nextSong);
+      Meteor.call('updateRoom', {name: room.name}, {$set: {currPlayer: Session.get('userId')}},
+        function(){        playSong(nextSong);}
+                 );
     }
 
     Session.set('alert', '');
@@ -105,23 +130,30 @@ Meteor.startup(function() {
     if(!room)
       return;
       
-    if(room.currSong){
-      Meteor.call("updateSongStartTime", room.currSong);
-      playSong(room.currSong);
-    
-      //if were the current player then add an event listener to the end of the song
-      if(room.currPlayer == Session.get("userId")){
-        audioPlayer.addEventListener("ended",  function(){
-         console.log("song ended");
-         Meteor.call("startNextSong", Session.get("roomId"));
-       });
-      }
+    if(Session.get("userId")===room.currPlayer && Session.get("nextSong")){
+      
+      Meteor.call("updateSong", Session.get("nextSong"), Session.get("roomName"));
+//      playSong(room.currSong);
+   
     }else{
       Session.set('alert', 'Select a song.');
     }
 
     console.log(room);
 
+  });
+
+  Deps.autorun(function(){
+    var room = Rooms.findOne({name: Session.get("roomName")});
+    if(room){
+      console.log(room);
+    var song = Songs.findOne({songId:room.currSong});
+    if(song){
+                             
+      if(audioPlayer.src != song.location)
+       playSong(song.id);
+      }
+    }
   });
 
 });

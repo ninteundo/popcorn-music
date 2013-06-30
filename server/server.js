@@ -110,6 +110,9 @@ Meteor.methods({
       time:Date.now()
     });
   },
+  updateSong: function(songId, roomName){
+//    Room.update({name: roomName}, {currSong: songId});
+  },
   selectSong: function(songId, userId){
     console.log("selecting song");
     user = Users.findOne(userId, {$inc: {reputation: 1}});
@@ -121,11 +124,13 @@ Meteor.methods({
   setSongStartTime: function(songId){
     Songs.update({_id: songId}, {$set: {startTime:Date.now()}});
   },
-  startNextSong: function(roomId){
-    var nextUser = Rooms.findOne({_id: roomId}, {nextPlayer: 1});
-    Rooms.update({_id: roomId}, {currPlayer: nextUser}); 
+  startNextSong: function(roomName){
+    var nextUser = Rooms.findOne({name: roomName}, {nextPlayer: 1});
+    Rooms.update({name: roomName}, {currPlayer: nextUser}); 
+    console.log("roomName", roomName, "next user", nextUser);
   },
   updateRoom: function(selector, modifier) {
+    console.log("updateroom");
     Rooms.update(selector, modifier);
   },
   findOneRoomWithUrl: function(selector) {
