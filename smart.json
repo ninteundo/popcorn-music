@@ -3,6 +3,8 @@
     "npm": {},
     "jquery-ui": {},
     "bootstrap-3": {},
-    "presence": {}
+    "presence": {},
+    "router": {},
+    "bootstrap-3": {}
   }
 }

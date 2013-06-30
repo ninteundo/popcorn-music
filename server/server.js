@@ -1,6 +1,6 @@
 
-Meteor.publish("users", function(){
-  return Users.find();
+Meteor.publish("users", function(roomName){
+  return Users.find({roomName: roomName});
 });
 
 
@@ -35,10 +35,20 @@ Meteor.publish('songs', function(){
   return Songs.find();
 });
 
+Meteor.publish('rooms', function() {
+  return Rooms.find();
+});
+
 Meteor.methods({
-  addUser: function(userName, userId){
+  addUser: function(userName, userId, roomName){
     console.log("adding user");
-    Users.insert({userName: userName, userId: userId, playCount:0, timeJoined:Date.now()});
+    Users.insert({
+      userName: userName,
+      userId: userId,
+      roomName: roomName,
+      playCount:0,
+      timeJoined:Date.now()
+    });
   },
   removeUser: function(userId){
     console.log('removeUser');

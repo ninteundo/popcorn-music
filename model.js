@@ -1,4 +1,5 @@
 
 Users = Meteor.users;
-Playlist = new Meteor.Collection("playlist");
+Playlists = new Meteor.Collection("playlist");
 Messages = new Meteor.Collection("messages");
+Rooms = new Meteor.Collection('rooms');
