@@ -3,7 +3,7 @@ Meteor.Router.add({
   '/room/:url': {to: 'room', and: function(url) {
     // Directly go to this room won't work because
     // Rooms is not loaded yet
-    room = Rooms.findOne({url: url});
+    var room = Rooms.findOne({url: url});
     Session.set('roomName', room.name);
   }}
 });

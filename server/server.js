@@ -82,6 +82,9 @@ Meteor.methods({
     Songs.update({_id: songId}, {$set: {currentlyPlaying:true, startTime:Date.now()}});
   },
   updateRoom: function(selector, modifier) {
-    
+    Rooms.update(selector, modifier);
+  },
+  findOneRoomWithUrl: function(selector) {
+    return Rooms.findOne(selector);
   }
 });
