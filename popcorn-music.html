@@ -6,9 +6,8 @@
 
   {{> circles }} 
 
-  {{> getName}}
+  {{> toolbar}}
 
-  {{> searchBar}}
 </body>
 
 <template name="getName">
@@ -20,11 +19,12 @@
   	{{> getName}}
   	<div class="navbar">
 	  <a class="navbar-brand" href="#">Popcorn Music</a>
-	  <ul class="nav navbar-nav">
+	  <ul class="nav nav-tabs">
 	    <li class="active"><a href="#">Songs</a></li>
 	    <li><a href="#">Chat</a></li>
 	  </ul>
 	</div>
+	{{> searchBar}}
   </div>
 </template>
 
