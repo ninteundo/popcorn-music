@@ -106,7 +106,7 @@ Template.index.events({
   'click #newRoomButton': function() {
     Session.set('nameExists', false);
     Session.set('roomNotExists', false);
-    name = $('#roomName').val()
+    var name = $('#roomName').val();
     url = nameToUrl(name);
     if (Rooms.find({
       url: url
@@ -115,7 +115,8 @@ Template.index.events({
     } else {
       Rooms.insert({
         name: name,
-        url: url
+        url: url,
+        currPlayer: Session.get("userId")
       });
       Meteor.Router.to('/room/' + url);
     }
@@ -123,7 +124,7 @@ Template.index.events({
   'click #joinRoomButton': function() {
     Session.set('nameExists', false);
     Session.set('roomNotExists', false);
-    name = $('#roomName').val()
+    var name = $('#roomName').val();
     url = nameToUrl(name);
     if (Rooms.find({
       url: url
