@@ -16,14 +16,12 @@ Meteor.publish("alerts", function(){
  return Alerts.find();
 });
 
-<<<<<<< HEAD
-=======
+
 var alert = function(data){
   Alerts.remove({});
   Alerts.insert(data);
 };
 
->>>>>>> a37247fc80dd6e8ce007ae0b7e5a99533b05d2ae
 Meteor.setInterval(function(){
 
   var filter = {};
@@ -45,19 +43,12 @@ Meteor.setInterval(function(){
   var d = _.difference(u, c);
 
   console.log(c.length, u.length, d.length);
- 
+
   console.log("difference");
   for(var z=0; z<d.length; z++){
     Users.remove({userId: d[z].userId});
-<<<<<<< HEAD
-}, 1000*100);
-=======
   }
-
 }, 100*100);
-
-
->>>>>>> a37247fc80dd6e8ce007ae0b7e5a99533b05d2ae
 
 Meteor.publish('playlists', function(){
   return Playlists.find();
