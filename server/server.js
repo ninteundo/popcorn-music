@@ -14,18 +14,18 @@ Meteor.setInterval(function(){
   var connected =  Meteor.presences.find(filter, {userId: 1}).fetch();
   var users = Users.find({}, {userId:1}).fetch();
 
-  var d = _.difference(users, connected);
+  var c = [];
+  for(var a=0; a<connected.length; a++)
+    c[a] = connected.userId;
 
-  console.log(connected.length, users.length, d.length);
- 
-  //i know this is a slow ass search, my appologize 
-//  for(var b=0; b<users.length; b++)
- //   for(var a=0; a<connected.length; a++)
-  //     console.log(connected[a].userId);
- 
-//  console.log("users");
- //   console.log("users" + users[b].userId);
+  var u = [];
+  for(var b=0; b<users.length; b++)
+    u[b] = users.userId;
 
+  var d = _.difference(u, c);
+
+  console.log(c.length, u.length, d.length);
+ 
   console.log("difference");
   for(var z=0; z<d.length; z++)
     Users.remove({userId: d[z].userId});
@@ -69,9 +69,13 @@ Meteor.methods({
   appointUser: function(userId, roomName){
     //Set all the current selector users to false
     Users.update({roomName: roomName}, {$set: {canSearch:false}});
-
     //Set the userid to be the selector
     Users.update({_id: userId, roomName: roomName}, {$set: {canSearch:true}});
+
+    //Set the next playing song to this users next playing song (if available)
+   // var songFromPlaylist = Playlists.
+    
+    //Set the next user to this users next user (if available)
   },
     
   removeUser: function(userId){

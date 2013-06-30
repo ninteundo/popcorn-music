@@ -38,18 +38,18 @@ Meteor.startup(function() {
   Deps.autorun(function(){
     //Song
     var playingSong = Songs.find({currentlyPlaying: true}).fetch();
+
     if(Session.get("roomName") != null){
     
      if(playingSong.length > 0){
       console.log("length more then 0");
       var playingSong = playingSong[0];
 
-        //If the player has a source
+       //if our player doesn't have anything to play yet 
         if(audioPlayer.src === ""){
 
           console.log("src empty");
           console.log("playingSong start time" + playingSong.startTime);
-          Meteor.call("updateSongStartTime", playingSong.songId);
 
           //if the song has already started but we arent listening to it
           if(playingSong.startTime > 0){
@@ -75,7 +75,7 @@ Meteor.startup(function() {
             $(audioPlayer).bind('canplay', function() {
               console.log('inside bind');
                 audioPlayer.currentTime = offset; // jumps to 29th secs
-                audioPlayer.play()
+                audioPlayer.play();
             });
 
             audioPlayer.canplay = function(){
@@ -86,6 +86,7 @@ Meteor.startup(function() {
           }
           //if the song has not started and the player doesn't have a source
           else{
+            Meteor.call("updateSongStartTime", playingSong.songId);
             console.log("start time undefined");
             audioPlayer.src = playingSong.url;
             audioPlayer.play();
@@ -103,6 +104,7 @@ Meteor.startup(function() {
             //if the current song is playing and we are listening to it
             console.log("creating event listener");
             audioPlayer.addEventListener("ended",  function(){
+              Meteor.call("updateSongStartTime", playingSong.songId);
               console.log("song ended");
               audioPlayer.src = playingSong.url;
               audioPlayer.play();
