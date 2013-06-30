@@ -2,11 +2,8 @@ var index;
 
 Meteor.startup(function() {
   Meteor.subscribe('users');
-<<<<<<< HEAD
   Meteor.subscribe('playlist');
-=======
   Meteor.subscribe('songs');
->>>>>>> fc311e2d005917722948dc6499b04e8507809336
 });
   
 Deps.autorun(function() {
