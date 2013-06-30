@@ -9,8 +9,29 @@
   {{> circles }} 
 
   {{> toolbar}}
+
+  {{renderPage}}
+
 </body>
 
+<template name="index">
+<div>
+  {{#if nameExists}}
+  <p>The name already exists.</p>
+  {{/if}}
+  {{#if roomNotExists}}
+  <p>The room does not exist.</p>
+  {{/if}}
+  <input id="roomName">
+  <button id="newRoomButton">Create a new room</button>
+  <button id="joinRoomButton">Join a room</button>
+</div>
+</template>
+
+<template name="room">
+  {{> circles }} 
+  {{> toolbar}}
+</template>
 
 <template name="getName">
   <input type="text" id="userNameInput" placeholder="Please enter your name" autofocus/>
@@ -41,27 +62,26 @@
 <template name="searchBar">
 	<input id="searchBar" type="text" placeholder="Find a song">
 	<div class="scroll-table">
-		<table class="table table-bordered table-hover">  
+		<table class="table table-bordered">  
 		  {{#each getSongs}}
-		    <tr>
 		    {{> song}}
-		    </tr>
 		  {{/each}}
 		</table>
 	</div>
 </template>
 
 <template name="song">
-	<td>{{title}}</td>
-  	<td>{{album}}</td>
+	<tr class="{{isCurrentSong}}">
+		<td>{{title}}</td>
+  		<td>{{album}}</td>
+  	</tr>
 </template>
-
 
 <template name="chat">
   <table class="table table-bordered table-hover">  
   {{#each messages}}
-    <tr>
-    {{> message}}
+  	<tr>
+		{{> message}}
     </tr>
   {{/each}}
   </table>

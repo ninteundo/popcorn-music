@@ -77,6 +77,16 @@ Template.circles.rendered = function(){
             .style('font-size', fontSize + 'px');
         });
 
+        hoverCircle.on('click', function(d){
+          if(d.userId === Session.get("userId")){
+            return;
+          }
+
+          Session.set('nextPlayer', d.userId);
+          circleG.selectAll('g').select('circle').style('stroke-width', '5px');
+          circle.style('stroke-width', '10px');
+        });
+
         label.text(d.userName);
       };
 

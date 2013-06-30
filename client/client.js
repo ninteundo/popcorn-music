@@ -2,16 +2,22 @@ var index; //should give this a better name
 var audioPlayer = new Audio();
 
 Meteor.startup(function() {
-  Meteor.subscribe('users');
   Meteor.subscribe('songs');
   Meteor.subscribe('messages');
+  Meteor.subscribe('rooms');
+  Meteor.subscribe('playlists');
 
   
   Deps.autorun(function() {
+    Meteor.subscribe('users', Session.get('roomName'));
     if (Songs.find().count() > 0) {
       index = lunr(function() {
-        this.field('title', {boost: 10});
-        this.field('album', {boost: 10});
+        this.field('title', {
+          boost: 10
+        });
+        this.field('album', {
+          boost: 10
+        });
         this.ref('_id');
       });
 
@@ -81,6 +87,52 @@ var make_okcancel_handler = function(options) {
   };
 };
 
+function nameToUrl(name) {
+  return name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+}
+
+Template.index.nameExists = function() {
+  return Session.get('nameExists');
+};
+
+Template.index.roomNotExists = function() {
+  return Session.get('roomNotExists');
+};
+
+Template.index.events({
+  'click #newRoomButton': function() {
+    Session.set('nameExists', false);
+    Session.set('roomNotExists', false);
+    var name = $('#roomName').val();
+    url = nameToUrl(name);
+    if (Rooms.find({
+      url: url
+    }).count() !== 0) {
+      Session.set('nameExists', true);
+    } else {
+      Rooms.insert({
+        name: name,
+        url: url,
+        currPlayer: Session.get("userId")
+      });
+      Meteor.Router.to('/room/' + url);
+    }
+  },
+  'click #joinRoomButton': function() {
+    Session.set('nameExists', false);
+    Session.set('roomNotExists', false);
+    var name = $('#roomName').val();
+    url = nameToUrl(name);
+    if (Rooms.find({
+      url: url
+    }).count() !== 0) {
+      Meteor.Router.to('/room/' + url);
+    } else {
+      Session.set('roomNotExists', true);
+    }
+  }
+});
+
 //Name
 Template.getName.events = {};
 
@@ -88,28 +140,39 @@ Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handl
   'ok': function(text, event) {
     Session.set("userName", $("#userNameInput").val());
     Session.set("userId", Meteor.uuid());
-    $("#userNameInput").remove();//.val("Thanks!");
+    $("#userNameInput").remove(); //.val("Thanks!");
 
-    Meteor.call("addUser", Session.get("userName"), Session.get("userId"));
+    Meteor.call("addUser",
+      Session.get("userName"),
+      Session.get("userId"),
+      Session.get("roomName"));
   }
 });
+
 
 //Search
 Template.searchBar.getSongs = function(){
   var text = $('#searchBar').val();
 
-  if(!text || text.length == 0){
+  if (!text || text.length == 0) {
     Session.set('filteredSongs', Songs.find().fetch());
   }
 
   return Session.get('filteredSongs');
 };
 
+Template.song.isCurrentSong = function(){
+  if(this._id === Session.get('nextSong')){
+    return 'highlight';
+  }
+  return '';
+};
+
 Template.searchBar.events({
   'keyup': function(event) {
     var text = $('#searchBar').val();
 
-    if(!text || text.length == 0){
+    if (!text || text.length == 0) {
       Session.set('filteredSongs', Songs.find().fetch());
       return;
     }
@@ -118,7 +181,9 @@ Template.searchBar.events({
     displays = [];
     for (var i in results) {
       id = results[i].ref;
-      song = Songs.findOne({_id: id});
+      song = Songs.findOne({
+        _id: id
+      });
       displays.push(song);
     }
     console.log('display', displays);
@@ -126,21 +191,24 @@ Template.searchBar.events({
   },
 
   'click tr': function(event){
-    Meteor.call('selectSong', $(this)[0]._id);
+    var id = this._id;
+    Meteor.call('selectSong', id);
+    Session.set('nextSong', id);
   }
 });
 
-Template.chat.messages = function(){
+Template.chat.messages = function() {
   return Messages.find().fetch();
 };
 
 Template.chat.events({
-  'keydown #chatInput': function(event){
+  'keydown #chatInput': function(event) {
 
-    if(event.keyCode == 13){
+    if (event.keyCode == 13) {
       var value = $('#chatInput').val();
       Meteor.call('addToChat', Session.get("userName"), Session.get("userId"), value);
       $('#chatInput').val('');
     }
   }
 });
+
