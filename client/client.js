@@ -1,10 +1,15 @@
 var index; //should give this a better name
-var audioPlayer = new Audio();
+audioPlayer = new Audio();
 
 Meteor.startup(function() {
   Meteor.subscribe('songs');
   Meteor.subscribe('rooms');
   Meteor.subscribe('playlists');
+
+  var playingSong = Songs.find({currentlyPlaying:true}).fetch();
+  if(playingSong.length > 0){
+  }
+    
 
   
   Deps.autorun(function() {
@@ -33,31 +38,81 @@ Meteor.startup(function() {
 
   Deps.autorun(function(){
     //Song
-    var playingQuery = Songs.find({currentlyPlaying: true}).fetch();
+    var playingSong = Songs.find({currentlyPlaying: true}).fetch();
 
-    if(playingQuery.length > 0){
-      playingQuery = playingQuery[0];
+    if(playingSong.length > 0){
+      console.log("length more then 0");
+      var playingSong = playingSong[0];
 
-      console.log(playingQuery);
+        //If the player has a source
+        if(audioPlayer.src === ""){
 
-      console.log("inside song changed");
-      console.log(playingQuery.url);
+          console.log("src empty");
+          console.log("playingSong start time" + playingSong.startTime);
+          Meteor.call("updateSongStartTime", playingSong.songId);
 
-      audioPlayer.pause();
-      audioPlayer.src = playingQuery.url;
-      audioPlayer.load();
+          //if the song has already started but we arent listening to it
+          if(playingSong.startTime > 0){
 
-      console.log(playingQuery.startTime);
+            console.log("syncing to currently playing song");
+            audioPlayer.src = playingSong.url;
+            audioPlayer.load();
 
-      var offset = (Date.now() - playingQuery.startTime)/1000;
-      offset = Math.round(offset*10)/10; //round to the nears 10ths place
-      console.log("offset" + offset);
-      audioPlayer.currentTime = offset;
+            console.log(playingSong.startTime);
 
-      console.log(audioPlayer);
-      audioPlayer.play();
+            var offset = (Date.now() - playingSong.startTime)/1000;
+            offset = Math.round(offset*10)/10; //round to the nears 10ths place
+            console.log("offset after round" + offset);
+            console.log("duration" + audioPlayer.duration);
+
+            //if the song has played past the duration and for some reason the ended event wasnt called 
+            
+            if(offset > audioPlayer.duration){
+              console.log("song has played past the duration");
+              audioPlayer.src = playingSong.url;
+              audioPlayer.play();
+            }
+            $(audioPlayer).bind('canplay', function() {
+              console.log('inside bind');
+                audioPlayer.currentTime = offset; // jumps to 29th secs
+                audioPlayer.play()
+            });
+
+            audioPlayer.canplay = function(){
+              console.log("inside on can play through");
+              audioPlayer.currentTime = offset;
+              audioPlayer.play();
+            };
+          }
+          //if the song has not started and the player doesn't have a source
+          else{
+            console.log("start time undefined");
+            audioPlayer.src = playingSong.url;
+            audioPlayer.play();
+          }
+        }
+        // if the player does have a source (something is loaded and playing or done playing)
+        else{
+          //if the current song has ended
+          if(audioPlayer.duration === audioPlayer.currentTime || audioPlayer.currentTime === 0){
+            console.log("current song ended");
+            audioPlayer.src = playingSong.url;
+            audioPlayer.play();
+          }
+          else{
+            //if the current song is playing and we are listening to it
+            console.log("creating event listener");
+            audioPlayer.addEventListener("ended",  function(){
+              console.log("song ended");
+              audioPlayer.src = playingSong.url;
+              audioPlayer.play();
+             });
+          }
+        }
     }
   });
+      
+
 
 });
 

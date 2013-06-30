@@ -70,15 +70,14 @@ Meteor.methods({
     });
   },
   selectSong: function(songId, userId){
+    console.log("selecting song");
     user = Users.findOne(userId, {$inc: {reputation: 1}});
-    var currSong = Songs.find({currentlyPlaying:true}).fetch();
-
-    if(currSong.length != 0){
-      return;
-    }
 
     console.log("inside select song");
     Songs.update({currentlyPlaying:true}, {$set: {currentlyPlaying:false, startTime:0}}); 
     Songs.update({_id: songId}, {$set: {currentlyPlaying:true, startTime:Date.now()}});
+  },
+  setSongStartTime: function(songId){
+    Songs.update({_id: songId}, {$set: {startTime:Date.now()}});
   }
 });
