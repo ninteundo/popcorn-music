@@ -32,6 +32,18 @@
 </template>
 
 <template name="chat">
+  <ul>  
+  {{#each messages}}
+    <li>
+    {{> messages}}
+    </li>
+  {{/each}}
+  </ul>
+  <input type="text" id="chatInput"/>
+</template>
+
+<template name="messages">
+  {{text}}
 </template>
 
 <template name="circles">

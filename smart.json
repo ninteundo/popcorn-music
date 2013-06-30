@@ -1,6 +1,7 @@
 {
   "packages": {
     "npm": {},
-    "jquery-ui": {}
+    "jquery-ui": {},
+    "bootstrap-3": {}
   }
 }
