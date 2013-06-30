@@ -4,11 +4,28 @@
 
 <body>
 
-  {{> circles }} 
-
-  {{> toolbar}}
+  {{renderPage}}
 
 </body>
+
+<template name="index">
+<div>
+  {{#if nameExists}}
+  <p>The name already exists.</p>
+  {{/if}}
+  {{#if roomNotExists}}
+  <p>The room does not exist.</p>
+  {{/if}}
+  <input id="roomName">
+  <button id="newRoomButton">Create a new room</button>
+  <button id="joinRoomButton">Join a room</button>
+</div>
+</template>
+
+<template name="room">
+  {{> circles }} 
+  {{> toolbar}}
+</template>
 
 <template name="getName">
   <input type="text" id="userNameInput" placeholder="Please enter your name" autofocus/>
