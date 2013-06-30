@@ -18,9 +18,6 @@ Meteor.startup(function() {
         console.log(song);
         index.add(song);
       }
-
-      console.log(index);
-      console.log(index.search('C'));
     }
   });
 });
