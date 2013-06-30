@@ -34,7 +34,7 @@ Meteor.methods({
   },
   selectSong: function(songId){
     console.log("inside select song");
-    Songs.update({currentlyPlaying:true}, {$set: {currentlyPlaying:false, timeStarted:0}}); 
-    Songs.update({_id: songId}, {$set: {currentlyPlaying:true, timeStarted:Date.now()}});
+    Songs.update({currentlyPlaying:true}, {$set: {currentlyPlaying:false, startTime:0}}); 
+    Songs.update({_id: songId}, {$set: {currentlyPlaying:true, startTime:Date.now()}});
   }
 });

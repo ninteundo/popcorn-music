@@ -35,19 +35,23 @@ Meteor.startup(function() {
       console.log(playingQuery);
 
       console.log("inside song changed");
+      console.log(playingQuery.url);
 
+      audioPlayer.pause();
       audioPlayer.src = playingQuery.url;
+      audioPlayer.load();
 
-      var offset = (Date.now() - currSong.startTime)/1000;
+      console.log(playingQuery.startTime);
+
+      var offset = (Date.now() - playingQuery.startTime)/1000;
+      offset = Math.round(offset*10)/10; //round to the nears 10ths place
+      console.log("offset" + offset);
       audioPlayer.currentTime = offset;
 
       console.log(audioPlayer);
       audioPlayer.play();
     }
-
   });
-
-
 
 });
 
