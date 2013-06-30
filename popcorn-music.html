@@ -39,7 +39,15 @@
 
 <template name="toolbar">
   <div id="toolbar" class="animated fadeInLeft">
+  	{{#if nameNotSet}}
   	{{> getName}}
+  	{{/if}}
+  	{{#if alert}}
+  	<div class="alert alert-block alert-info alert-custom">
+  		{{alertContent}}
+  		<span id="removeAlert" class="glyphicon glyphicon-remove-circle"></span>
+  	</div>
+  	{{/if}}
   	<div class="navbar">
 	  <a class="navbar-brand" href="#">Popcorn Music</a>
 	  <ul class="nav nav-tabs nav-tabs-custom">

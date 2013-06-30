@@ -70,6 +70,23 @@ body{
 	background-color: rgb(238, 238, 238);
 }
 
+.alert-custom{
+	font-size: 30px;
+	word-wrap: break-word;
+	padding-right: 40px;
+}
+
+#removeAlert{
+	position:absolute;
+	right:15px;
+	top:15px;
+	opacity: .7;
+}
+
+#removeAlert:hover{
+	opacity:1;
+}
+
 #searchBar{
 
 }
