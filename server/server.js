@@ -27,8 +27,8 @@ Meteor.publish('playlists', function(){
   return Playlists.find();
 });
 
-Meteor.publish('messages', function(){
-  return Messages.find();
+Meteor.publish('messages', function(roomName){
+  return Messages.find({roomName: roomName});
 });
 
 Meteor.publish('songs', function(){
@@ -46,7 +46,7 @@ Meteor.methods({
       userName: userName,
       userId: userId,
       roomName: roomName,
-      playCount:0,
+      reputation: 0,
       timeJoined:Date.now()
     });
   },
@@ -60,11 +60,17 @@ Meteor.methods({
     Playlists.insert({songId: songId, userId:userId, time:Date.now()});
     Users.update({userId:userId}, {$inc: {playCount: 1}});
   },
-  addToChat: function(userName, userId, text){
-    Messages.insert({userId: userId, userName:userName, text:text, time:Date.now()});
+  addToChat: function(userName, userId, roomName, text){
+    Messages.insert({
+      userId: userId,
+      userName: userName,
+      text: text,
+      roomName: roomName,
+      time:Date.now()
+    });
   },
-  selectSong: function(songId){
-
+  selectSong: function(songId, userId){
+    user = Users.findOne(userId, {$inc: {reputation: 1}});
     var currSong = Songs.find({currentlyPlaying:true}).fetch();
 
     if(currSong.length != 0){

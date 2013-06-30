@@ -3,13 +3,13 @@ var audioPlayer = new Audio();
 
 Meteor.startup(function() {
   Meteor.subscribe('songs');
-  Meteor.subscribe('messages');
   Meteor.subscribe('rooms');
   Meteor.subscribe('playlists');
 
   
   Deps.autorun(function() {
     Meteor.subscribe('users', Session.get('roomName'));
+    Meteor.subscribe('messages', Session.get('roomName'));
     if (Songs.find().count() > 0) {
       index = lunr(function() {
         this.field('title', {
@@ -192,7 +192,7 @@ Template.searchBar.events({
 
   'click tr': function(event){
     var id = this._id;
-    Meteor.call('selectSong', id);
+    Meteor.call('selectSong', id, Sessiong.get('userId'));
     Session.set('nextSong', id);
   }
 });
@@ -206,7 +206,11 @@ Template.chat.events({
 
     if (event.keyCode == 13) {
       var value = $('#chatInput').val();
-      Meteor.call('addToChat', Session.get("userName"), Session.get("userId"), value);
+      Meteor.call('addToChat',
+        Session.get("userName"),
+        Session.get("userId"),
+        Session.get('roomName'),
+        value);
       $('#chatInput').val('');
     }
   }
