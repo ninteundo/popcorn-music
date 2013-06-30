@@ -39,6 +39,25 @@
 <template name="songlist">
 </template>
 
+<template name="searchBar">
+	<input id="searchBar" type="text" placeholder="Find a song">
+	<div class="scroll-table">
+		<table class="table table-bordered table-hover">  
+		  {{#each getSongs}}
+		    <tr>
+		    {{> song}}
+		    </tr>
+		  {{/each}}
+		</table>
+	</div>
+</template>
+
+<template name="song">
+	<td>{{title}}</td>
+  	<td>{{album}}</td>
+</template>
+
+
 <template name="chat">
   <table class="table table-bordered table-hover">  
   {{#each messages}}
@@ -47,7 +66,7 @@
     </tr>
   {{/each}}
   </table>
-  <input type="text" id="chatInput"/>
+  <input type="text" id="chatInput" placeholder="Type here to chat"/>
 </template>
 
 <template name="message">

@@ -8,6 +8,7 @@ Meteor.startup(function() {
     if (Songs.find().count() > 0) {
       index = lunr(function() {
         this.field('title', {boost: 10});
+        this.field('album', {boost: 10});
         this.ref('_id');
       });
 
@@ -61,19 +62,37 @@ Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handl
   }
 });
 
+Template.searchBar.getSongs = function(){
+  var text = $('#searchBar').val();
+
+  if(!text || text.length == 0){
+    Session.set('filteredSongs', Songs.find().fetch());
+  }
+
+  return Session.get('filteredSongs');
+};
+
 Template.searchBar.events({
   'keyup': function(event) {
-    text = $('#searchBar').val();
+    var text = $('#searchBar').val();
+
+    if(!text || text.length == 0){
+      Session.set('filteredSongs', Songs.find().fetch());
+      return;
+    }
+
     results = index.search(text);
     displays = [];
     for (var i in results) {
       id = results[i].ref;
       song = Songs.findOne({_id: id});
-      displays.push(song['title'] + ' - ' + song['artist']);
+      displays.push(song);
     }
-    $("#searchBar").autocomplete({
-      source: displays
-    });
+    console.log('display', displays);
+    Session.set('filteredSongs', displays);
+  },
+
+  'click tr': function(event){
   }
 });
 
@@ -86,8 +105,6 @@ Template.chat.events({
 
     if(event.keyCode == 13){
       var value = $('#chatInput').val();
-      console.log(value);
-      console.log(Session.get("userName"), Session.get("userId"), value);
       Meteor.call('addToChat', Session.get("userName"), Session.get("userId"), value);
       $('#chatInput').val('');
     }
