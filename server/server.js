@@ -4,24 +4,24 @@ Meteor.publish("users", function(roomName){
 });
 
 
-// Meteor.setInterval(function(){
+Meteor.setInterval(function(){
 
-//   var filter = {};
+  var filter = {};
 
-//   // ProTip: unless you need it, don't send lastSeen down as it'll make your 
-//   // templates constantly re-render (and use bandwidth)
-//   var connected =  Meteor.presences.find(filter, {fields: {state: true, userId: true}}).fetch();
-//   var users = Users.find().fetch();
+  // ProTip: unless you need it, don't send lastSeen down as it'll make your 
+  // templates constantly re-render (and use bandwidth)
+  var connected =  Meteor.presences.find(filter, {fields: {state: true, userId: true}}).fetch();
+  var users = Users.find().fetch();
 
-//   var difference = _.difference(users, connected);
+  var difference = _.difference(connected, users);
 
-//   console.log(connected.length, users.length, difference.length);
+  console.log(connected.length, users.length, difference.length);
 
-//   _.each(difference, function(el){
-//     Users.remove({_id: el._id});
-//   });
+  _.each(difference, function(el){
+    //Users.remove({userId: el.userId});
+  });
 
-// }, 1000);
+}, 1000*100);
 
 Meteor.publish('playlists', function(){
   return Playlists.find();
