@@ -145,7 +145,7 @@ Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handl
     // If there is no player in the room, set this player as the
     // current player
     if (Users.find({roomName: Session.get('roomName')}).count() == 0) {
-      Rooms.update({name: Session.get('roomName')},
+      Meteor.call('updateRoom', {name: Session.get('roomName')},
         {$set: {currentPlayerId: Session.get('userId')}});
     }
 

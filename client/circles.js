@@ -99,7 +99,7 @@ Template.circles.rendered = function(){
 
           Session.set('nextPlayer', d.userId);
           room = Rooms.findOne({name: Session.get('roomName')});
-          Rooms.update({name: Session.get('roomName')},
+          Meteor.call('updateRoom', {name: Session.get('roomName')},
             {$set: {nextPlayerId: d.userId}});
 
           circleG.selectAll('g').select('circle').style('stroke-width', '5px');

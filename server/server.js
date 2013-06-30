@@ -80,5 +80,8 @@ Meteor.methods({
     console.log("inside select song");
     Songs.update({currentlyPlaying:true}, {$set: {currentlyPlaying:false, startTime:0}}); 
     Songs.update({_id: songId}, {$set: {currentlyPlaying:true, startTime:Date.now()}});
+  },
+  updateRoom: function(selector, modifier) {
+    
   }
 });
