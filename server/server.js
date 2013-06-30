@@ -28,7 +28,7 @@ Meteor.setInterval(function(){
 
   console.log("difference");
   for(var z=0; z<d.length; z++)
-    Users.remove({userId: z.userId});
+    Users.remove({userId: d[z].userId});
 
 
 
