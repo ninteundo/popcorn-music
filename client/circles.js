@@ -67,6 +67,10 @@ Template.circles.rendered = function(){
         circle.attr('r', circleRad);
         hoverCircle.attr('r', circleRad);
 
+        if(d.userId === Session.get('userId')){
+          circle.style('opacity', 1);
+        }
+
         hoverCircle.on('mouseover', function(){
           transitionRadius(circle, circleRad + 20);
           transitionRadius(hoverCircle, circleRad + 20);
@@ -84,6 +88,7 @@ Template.circles.rendered = function(){
         });
 
         hoverCircle.on('click', function(d){
+
           if(d.userId === Session.get("userId")){
             return;
           }
@@ -92,8 +97,16 @@ Template.circles.rendered = function(){
           room = Rooms.findOne({roomName: Session.get('roomName')});
           Rooms.update({roomName: Session.get('roomName')},
             {$set: {nextPlayerId: d.userId}});
+          
           circleG.selectAll('g').select('circle').style('stroke-width', '5px');
-          circle.style('stroke-width', '10px');
+
+          if(d.userId === Session.get('nextPlayer')){
+            Session.set('nextPlayer', null);
+          }else{
+            Session.set('nextPlayer', d.userId);
+            circle.style('stroke-width', '10px');
+          }
+
         });
 
         label.text(d.userName);
@@ -126,7 +139,7 @@ Template.circles.rendered = function(){
 
       var playCircle = controlsG.select('.play');
 
-      playCircle.attr('r', ringRad/2);
+      //playCircle.attr('r', ringRad/2);
 
 
     });
