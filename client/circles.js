@@ -1,20 +1,9 @@
-Template.circles.nextPlayerNotSelected = function() {
-  var userId = Session.get('userId');
-  console.log("room name" + Session.get('roomName'));
-  var room = Rooms.findOne({name: Session.get('roomName')});
-
-  console.log(room);
-  console.log(Session.get('roomName'));
-
-  return ((room.currentPlayerId === userId) && (!(Session.get('nextPlayer'))));
-}
 
 
 Template.circles.rendered = function(){
   var self = this;
   self.svg = d3.select(self.find("svg"));
 
-  console.log("handle" + self.handle);
   if (! self.handle) {
     self.handle = Deps.autorun(function () {
 
@@ -99,10 +88,10 @@ Template.circles.rendered = function(){
             return;
           }
 
-          Session.set('nextPlayer', d.userId);
-          room = Rooms.findOne({name: Session.get('roomName')});
-          Meteor.call('updateRoom', {name: Session.get('roomName')},
-            {$set: {nextPlayerId: d.userId}});
+          //Session.set('nextPlayer', d.userId);
+          // room = Rooms.findOne({name: Session.get('roomName')});
+          // Meteor.call('updateRoom', {name: Session.get('roomName')},
+          //   {$set: {nextPlayerId: d.userId}});
 
           circleG.selectAll('g').select('circle').style('stroke-width', '5px');
 

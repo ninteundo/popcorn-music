@@ -1,9 +1,22 @@
 
+Meteor.startup(function(){
+  Alerts.remove({});
+  Songs.update({currentlyPlaying: true}, {$set: {currentlyPlaying: false}});
+  Users.remove({});
+  Rooms.remove({});
+  Messages.remove({});
+
+});
+
 Meteor.publish("users", function(roomName){
   return Users.find({roomName: roomName});
 });
 
+Meteor.publish("alerts", function(){
+ return Alerts.find();
+});
 
+<<<<<<< HEAD
 Meteor.setInterval(function(){
 
   var filter = {};
@@ -29,12 +42,25 @@ Meteor.setInterval(function(){
   console.log("difference");
   for(var z=0; z<d.length; z++)
     Users.remove({userId: d[z].userId});
+=======
+var alert = function(data){
+  Alerts.remove({});
+  Alerts.insert(data);
+};
+
+Meteor.setInterval(function(){
+
+  // var filter = {};
+  // var connected =  Meteor.presences.find(filter, {userId: 1}).fetch();
+  // var users = Users.find({}, {userId:1}).fetch();
+  // var d = _.difference(users, connected);
+>>>>>>> cdffc93b6c5a2b93fbb797e8cd148adf553e5a2e
 
 
+  // console.log(connected.length, users.length, d.length);
+  // for(var z=0; z<d.length; z++)
+  //   Users.remove({userId: d[z].userId});
 
-//  _.each(difference, function(el){
-    //Users.remove({userId: el.userId});
-//  });
 
 }, 1000*100);
 
@@ -105,7 +131,6 @@ Meteor.methods({
     Songs.update({currentlyPlaying:true}, {$set: {currentlyPlaying:false, startTime:0}}); 
     Songs.update({_id: songId}, {$set: {currentlyPlaying:true, startTime:Date.now()}});
   },
-  
   setSongStartTime: function(songId){
     Songs.update({_id: songId}, {$set: {startTime:Date.now()}});
   },
@@ -114,5 +139,14 @@ Meteor.methods({
   },
   findOneRoomWithUrl: function(selector) {
     return Rooms.findOne(selector);
+  },
+  createRoom: function(url, currPlayer){
+    if(!Rooms.findOne({url: url})){
+      Rooms.insert({
+         name: url,
+         url: url,
+         currPlayer: currPlayer
+       });
+    }
   }
 });

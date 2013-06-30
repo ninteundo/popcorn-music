@@ -20,8 +20,7 @@
 		<br />
 		<input type="text" id="roomName" placeholder="Type a room name">
 		<br />
-		<button class="btn btn-primary" id="newRoomButton">Create a new room</button>
-		<button class="btn btn-primary" id="joinRoomButton">Join a room</button>
+		<button class="btn btn-primary" id="newRoomButton">Join or create a room</button>
 	</div>
 </template>
 
@@ -55,12 +54,7 @@
 
 	<div class="tab-content">
 	  <div class="tab-pane" id="songs">
-    {{#if allowedToPick}}
 	  	{{> searchBar}}
-    {{/if}}
-    {{#unless allowedToPick}}
-      You must be chosen to pick a song
-    {{/unless}}
 	  </div>
 	  <div class="tab-pane active" id="chat">
 	  	{{> chat}}
@@ -104,9 +98,6 @@
 </template>
 
 <template name="circles">
-  {{#if nextPlayerNotSelected}}
-  <p>Please pick the next player by clicking him/her!</p>
-  {{/if}}
   <svg width="500" height="500" class="noselect">
      <g class="circles"></g>
      <g class="controls">
