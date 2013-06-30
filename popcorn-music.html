@@ -12,7 +12,7 @@
 </body>
 
 <template name="index">
-	<div id="roomContainer">
+	<div id="roomContainer" class="animated fadeInDown">
 		<div id="index-header" href="#">Welcome to Popcorn Music!</div><br />
 		{{#if nameExists}}
 		<p>The name already exists.</p>
@@ -38,11 +38,11 @@
 </template>
 
 <template name="toolbar">
-  <div id="toolbar">
+  <div id="toolbar" class="animated fadeInLeft">
   	{{> getName}}
   	<div class="navbar">
 	  <a class="navbar-brand" href="#">Popcorn Music</a>
-	  <ul class="nav nav-tabs">
+	  <ul class="nav nav-tabs nav-tabs-custom">
 	    <li class="active"><a href="#songs" data-toggle="tab">Songs</a></li>
 	    <li><a href="#chat" data-toggle="tab">Chat</a></li>
 	  </ul>
