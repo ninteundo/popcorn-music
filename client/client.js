@@ -3,7 +3,6 @@ var audioPlayer;
 
 Meteor.startup(function() {
   Meteor.subscribe('songs');
-  Meteor.subscribe('messages');
   Meteor.subscribe('rooms');
   Meteor.subscribe('playlists');
 
@@ -18,6 +17,7 @@ Meteor.startup(function() {
 
   Deps.autorun(function() {
     Meteor.subscribe('users', Session.get('roomName'));
+    Meteor.subscribe('messages', Session.get('roomName'));
     if (Songs.find().count() > 0) {
       index = lunr(function() {
         this.field('title', {
@@ -135,18 +135,6 @@ Template.index.events({
   }
 });
 
-//Toolbar
-Template.toolbar.events({
-  'click #song1button': function(){
-    console.log("song 1 button clicked");
-    Meteor.call("selectSong", "Y7TBikyKptS8cdMcA");
-  },
-  'click #song2button': function(){
-    console.log("song 2 button clicked");
-    Meteor.call("selectSong", "a7Afq2BTA8is4gAJg");
-  }
-});
-
 //Name
 Template.getName.events = {};
 
@@ -206,7 +194,7 @@ Template.searchBar.events({
 
   'click tr': function(event){
     var id = this._id;
-    Meteor.call('selectSong', id);
+    Meteor.call('selectSong', id, Sessiong.get('userId'));
     Session.set('nextSong', id);
   }
 });
@@ -220,7 +208,11 @@ Template.chat.events({
 
     if (event.keyCode == 13) {
       var value = $('#chatInput').val();
-      Meteor.call('addToChat', Session.get("userName"), Session.get("userId"), value);
+      Meteor.call('addToChat',
+        Session.get("userName"),
+        Session.get("userId"),
+        Session.get('roomName'),
+        value);
       $('#chatInput').val('');
     }
   }
