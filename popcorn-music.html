@@ -4,11 +4,17 @@
 
 <body>
 
+
   {{> circles }} 
 
   {{> toolbar}}
 
 </body>
+
+<template name="song">
+<i>Current song name</i>
+   {{name}}
+</template>
 
 <template name="getName">
   <input type="text" id="userNameInput" placeholder="Please enter your name" autofocus/>
@@ -28,6 +34,10 @@
 	<div class="tab-content">
 	  <div class="tab-pane" id="songs">
 	  	{{> searchBar}}
+      
+    {{> song}}
+      <a href="#" id="song1button">song 1</a>
+      <a href="#" id="song2button">song 2</a>
 	  </div>
 	  <div class="tab-pane active" id="chat">
 	  	{{> chat}}

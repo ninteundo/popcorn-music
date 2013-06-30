@@ -1,1 +1,1 @@
-Songs = new Meteor.Collection('songs');
+Songs = new Meteor.Collection("songs");

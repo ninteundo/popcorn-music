@@ -1,13 +1,13 @@
 var index; //should give this a better name
 var audioPlayer;
 
-
 Meteor.startup(function() {
   Meteor.subscribe('users');
   Meteor.subscribe('songs');
+  Meteor.subscribe('messages');
 
   //Check if theres a song playing and if there is start playing at the same position 
-  var currSong = Songs.findOne({playing:true}); // add room id here
+  var currSong = Songs.findOne({currentlyPlaying:true}); // add room id here
   if(currSong != null){
     audioPlayer = new Audio(currSong.location);
     
@@ -16,8 +16,8 @@ Meteor.startup(function() {
     audioPlayer.currentTime = offset;
     audioPlayer.play();
   }
+  
 
-  Meteor.subscribe('messages');
   
   Deps.autorun(function() {
     if (Songs.find().count() > 0) {
@@ -35,6 +35,29 @@ Meteor.startup(function() {
       }
     }
   });
+
+  Deps.autorun(function(){
+    //Song
+    var playingQuery = Songs.find({currentlyPlaying: true}).fetch();
+
+    if(playingQuery.length > 0){
+
+      playingQuery = playingQuery[0];
+
+      console.log(playingQuery);
+
+      console.log("inside song changed");
+
+        Session.set("currentSong", playingQuery.id);
+        console.log("playingQuery:" +playingQuery);
+        audioPlayer = new Audio(playingQuery.url);
+        console.log(audioPlayer);
+        audioPlayer.play();
+    }
+
+  });
+
+
 
 });
 
@@ -64,6 +87,18 @@ var make_okcancel_handler = function(options) {
   };
 };
 
+//Toolbar
+Template.toolbar.events({
+  'click #song1button': function(){
+    console.log("song 1 button clicked");
+    Meteor.call("selectSong", "Y7TBikyKptS8cdMcA");
+  },
+  'click #song2button': function(){
+    console.log("song 2 button clicked");
+    Meteor.call("selectSong", "a7Afq2BTA8is4gAJg");
+  }
+});
+
 //Name
 Template.getName.events = {};
 
@@ -80,35 +115,27 @@ Template.getName.events[okcancel_events('#userNameInput')] = make_okcancel_handl
 //Search
 Template.searchBar.events({
   'keyup': function(event) {
-    text = $('#searchBar').val();
-    results = index.search(text);
-    displays = [];
-    for (var i in results) {
-      id = results[i].ref;
-      song = Songs.findOne({_id: id});
-      displays.push(song['title'] + ' - ' + song['artist']);
+    if(event.which === 13){
+      console.log('enter inside search');
+      console.log();
+      
     }
-    $("#searchBar").autocomplete({
-      source: displays
-    });
+    else{
+      text = $('#searchBar').val();
+      results = index.search(text);
+      displays = [];
+      for (var i in results) {
+       id = results[i].ref;
+        song = Songs.findOne({_id: id});
+        displays.push(song['title'] + ' - ' + song['artist']);
+      
+      }
+      $("#searchBar").autocomplete({
+        source: displays
+      });
+    }
   }
 });
-
-//Song
-Template.song = function(){
-  var currSongFromDb = Songs.find({currentlyPlaying: true});
-  var currSongFromSessionId  = Session.get("currentSong");
-
-  if(currSongFromDb.songId != currSongFromSessionId){
-
-    Session.set("currentSong", currSongFromDb.songId);
-    audioPlayer = new Audio(currentSongFromDb.location);
-    audioPlayer.play();
-
-  }
-
-  return currSongFromDb;
-};
 
 Template.chat.messages = function(){
   return Messages.find().fetch();
