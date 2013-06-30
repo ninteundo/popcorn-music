@@ -93,6 +93,7 @@ Template.searchBar.events({
   },
 
   'click tr': function(event){
+    //select this song
   }
 });
 

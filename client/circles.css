@@ -10,6 +10,7 @@ svg{
 	text-anchor: middle;
 	font-family: Helvetica;
 	fill: rgb(100,100,100);
+	dominant-baseline: central;
 }
 
 .bkg-circle{
