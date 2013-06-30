@@ -29,8 +29,6 @@ Meteor.methods({
     Users.update({userId:userId}, {$inc: {playCount: 1}});
   },
   addToChat: function(userName, userId, text){
-    //colon should be added by client
-    var text = userName + text;
-    Messages.insert({userId: userId, text:text, time:Date.now()});
+    Messages.insert({userId: userId, userName:userName, text:text, time:Date.now()});
   }
 });
