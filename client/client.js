@@ -4,24 +4,8 @@ Meteor.startup(function() {
   Meteor.subscribe('users');
 <<<<<<< HEAD
   Meteor.subscribe('playlist');
-});
 =======
   Meteor.subscribe('songs');
-  Deps.autorun(function() {
-    if (Songs.find().count() > 0) {
-      index = lunr(function() {
-        this.field('title', {boost: 10});
-        this.ref('_id');
-      });
-
-      songs = Songs.find().fetch()
-      for (i in songs) {
-        song = {};
-        song['_id'] = songs[i]['_id'];
-        song['title'] = songs[i]['title'];
-        console.log(song);
-        index.add(song);
-      }
 >>>>>>> fc311e2d005917722948dc6499b04e8507809336
 });
   
@@ -32,8 +16,6 @@ Deps.autorun(function() {
       this.ref('_id');
     });
 
-      console.log(index);
-      console.log(index.search('C'));
     songs = Songs.find().fetch()
     for (i in songs) {
       song = {};
@@ -42,7 +24,6 @@ Deps.autorun(function() {
       console.log(song);
       index.add(song);
     }
-  });
 
     console.log(index);
     console.log(index.search('C'));
